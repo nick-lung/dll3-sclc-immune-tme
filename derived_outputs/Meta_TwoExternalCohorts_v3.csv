@@ -1,0 +1,2 @@
+pooled_r,ci_low,ci_high,p,Q,df,p_heterogeneity,note
+-0.3569,-0.4864,-0.2122,3.598242197848462e-06,0.6395,1,0.4239,"k=2; Cochran's Q has minimal power, so heterogeneity is reported as not detectable rather than absent"

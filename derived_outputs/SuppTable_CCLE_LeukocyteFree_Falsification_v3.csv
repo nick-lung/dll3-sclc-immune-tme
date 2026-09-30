@@ -1,0 +1,13 @@
+comparison,n,spearman_r,ci_low,ci_high,p,role,note
+"DLL3 ~ APM (5-gene, harmonised)",59,-0.053,-0.305,0.2058,0.6899141539090432,PRIMARY falsification test,tissue bulk gives r = -0.299 (Jiang) and -0.411 (Cologne)
+DLL3 ~ APM (6-gene sensitivity),59,-0.0511,-0.3032,0.2077,0.7006492965277771,sensitivity,
+DLL3 ~ ASCL1,59,0.6671,0.4957,0.7885,7.94802997586309e-09,positive control,DLL3 is an ASCL1-driven NE gene; must remain strong in pure tumour cells
+"DLL3 ~ NE score (ASCL1, NEUROD1)",59,0.3147,0.0637,0.5282,0.015209283110262989,positive control,
+DLL3 ~ PTPRC,59,0.0877,-0.1723,0.3362,0.5089826837036735,purity control,tissue bulk gives r = -0.400 (Jiang) and -0.423 (Cologne)
+PTPRC ~ APM,59,0.0477,-0.211,0.3001,0.7197494966769356,purity control,tissue bulk gives r = +0.599 (Jiang) and +0.814 (Cologne)
+DLL3 ~ HLA-A,59,0.1169,-0.1435,0.3621,0.37794733321685015,individual gene,
+DLL3 ~ HLA-B,59,-0.1821,-0.4187,0.0776,0.16740662255874633,individual gene,
+DLL3 ~ B2M,59,-0.1921,-0.4271,0.0673,0.14505086617346938,individual gene,
+DLL3 ~ TAP1,59,-0.1182,-0.3633,0.1422,0.37256797071903147,individual gene,
+DLL3 ~ TAP2,59,0.0126,-0.2443,0.2678,0.9247443171144096,individual gene,
+DLL3 ~ HLA-C,59,-0.0698,-0.3202,0.1896,0.5991383146744181,individual gene,

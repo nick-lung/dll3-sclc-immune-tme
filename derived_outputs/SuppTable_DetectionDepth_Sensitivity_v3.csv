@@ -1,0 +1,19 @@
+analysis,quantity,tnfrsf9_pos_median,tnfrsf9_neg_median,auc,p,n_pos,n_neg,model,odds_ratio,ci_low,ci_high,n_cells,n_donors,higher_in_pos,median_delta,rank_biserial
+depth_exposure_check,total UMI,4798.0,4093.5,0.5992,2.0736779876537934e-22,989.0,4296.0,,,,,,,,,
+depth_exposure_check,detected genes,1613.0,1400.0,0.6058,2.730656242978422e-25,989.0,4296.0,,,,,,,,,
+depth_exposure_check,mitochondrial fraction,0.0564,0.0691,0.4036,2.777444899671766e-21,989.0,4296.0,,,,,,,,,
+cell_level_logistic,PD-1,,,,2.9066677635269967e-10,,,unadjusted,2.647,1.956,3.583,5285.0,,,,
+cell_level_logistic,PD-1,,,,5.023463607240829e-09,,,+ depth,2.163,1.67,2.802,5285.0,,,,
+cell_level_logistic,PD-1,,,,9.843348642484382e-14,,,+ depth + subtype + donor,1.955,1.639,2.333,5285.0,,,,
+cell_level_logistic,TIM-3,,,,2.2302672542967533e-11,,,unadjusted,3.582,2.465,5.206,5285.0,,,,
+cell_level_logistic,TIM-3,,,,3.118723340620434e-09,,,+ depth,2.95,2.062,4.218,5285.0,,,,
+cell_level_logistic,TIM-3,,,,1.0363243506174425e-19,,,+ depth + subtype + donor,3.035,2.389,3.857,5285.0,,,,
+cell_level_logistic,GZMB,,,,0.6832128189873214,,,unadjusted,1.126,0.637,1.988,5285.0,,,,
+cell_level_logistic,GZMB,,,,0.7908301474312638,,,+ depth,0.935,0.567,1.54,5285.0,,,,
+cell_level_logistic,GZMB,,,,0.18712012029226832,,,+ depth + subtype + donor,1.235,0.903,1.69,5285.0,,,,
+continuous_expression_paired,PD-1,,,,0.00836181640625,,,,,,,,15.0,13.0,0.6174,0.75
+continuous_expression_paired,TIM-3,,,,6.103515625e-05,,,,,,,,15.0,15.0,1.142,1.0
+continuous_expression_paired,GZMB,,,,0.063720703125,,,,,,,,15.0,9.0,4.9035,0.55
+depth_matched_paired,PD-1,,,,0.0006103515625,,,,,,,,15.0,13.0,16.67,
+depth_matched_paired,TIM-3,,,,6.103515625e-05,,,,,,,,15.0,15.0,24.49,
+depth_matched_paired,GZMB,,,,0.10699462890625,,,,,,,,15.0,10.0,6.39,

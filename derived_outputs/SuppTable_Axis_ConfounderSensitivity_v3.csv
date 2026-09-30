@@ -1,0 +1,28 @@
+y,endpoint_role,model,n,partial_spearman_r,p,covariates
+TNFRSF9pos_pct_of_CD8,PRINCIPAL,unadjusted,19,0.614,0.0052,none
+TNFRSF9pos_pct_of_CD8,PRINCIPAL,+ epithelial sequencing depth,19,0.5088,0.0261,epi_total_counts
+TNFRSF9pos_pct_of_CD8,PRINCIPAL,+ epithelial detected genes,19,0.5579,0.0131,epi_n_genes_by_counts
+TNFRSF9pos_pct_of_CD8,PRINCIPAL,+ epithelial cell number,19,0.6228,0.0044,n_epi
+TNFRSF9pos_pct_of_CD8,PRINCIPAL,+ immune cell number,19,0.714,0.0006,n_imm
+TNFRSF9pos_pct_of_CD8,PRINCIPAL,+ immune fraction of profiled cells,19,0.6123,0.0053,immune_fraction
+TNFRSF9pos_pct_of_CD8,PRINCIPAL,+ immune-compartment depth,19,0.693,0.001,imm_total_counts
+TNFRSF9pos_pct_of_CD8,PRINCIPAL,+ depth and immune fraction,19,0.493,0.032,epi_total_counts;immune_fraction
+TNFRSF9pos_pct_of_CD8,PRINCIPAL,"+ depth, immune fraction, cell number",19,0.5351,0.0182,epi_total_counts;immune_fraction;n_epi
+TNFRSF9+PD1+_pct_of_CD8,supportive,unadjusted,19,0.4704,0.0421,none
+TNFRSF9+PD1+_pct_of_CD8,supportive,+ epithelial sequencing depth,19,0.4316,0.065,epi_total_counts
+TNFRSF9+PD1+_pct_of_CD8,supportive,+ epithelial detected genes,19,0.4439,0.057,epi_n_genes_by_counts
+TNFRSF9+PD1+_pct_of_CD8,supportive,+ epithelial cell number,19,0.4596,0.0477,n_epi
+TNFRSF9+PD1+_pct_of_CD8,supportive,+ immune cell number,19,0.5351,0.0182,n_imm
+TNFRSF9+PD1+_pct_of_CD8,supportive,+ immune fraction of profiled cells,19,0.4456,0.0559,immune_fraction
+TNFRSF9+PD1+_pct_of_CD8,supportive,+ immune-compartment depth,19,0.5684,0.0111,imm_total_counts
+TNFRSF9+PD1+_pct_of_CD8,supportive,+ depth and immune fraction,19,0.4175,0.0753,epi_total_counts;immune_fraction
+TNFRSF9+PD1+_pct_of_CD8,supportive,"+ depth, immune fraction, cell number",19,0.3895,0.0993,epi_total_counts;immune_fraction;n_epi
+TNFRSF9+TIM3+_pct_of_CD8,supportive,unadjusted,19,0.5079,0.0264,none
+TNFRSF9+TIM3+_pct_of_CD8,supportive,+ epithelial sequencing depth,19,0.4561,0.0497,epi_total_counts
+TNFRSF9+TIM3+_pct_of_CD8,supportive,+ epithelial detected genes,19,0.4877,0.0342,epi_n_genes_by_counts
+TNFRSF9+TIM3+_pct_of_CD8,supportive,+ epithelial cell number,19,0.5018,0.0286,n_epi
+TNFRSF9+TIM3+_pct_of_CD8,supportive,+ immune cell number,19,0.5754,0.0099,n_imm
+TNFRSF9+TIM3+_pct_of_CD8,supportive,+ immune fraction of profiled cells,19,0.4667,0.044,immune_fraction
+TNFRSF9+TIM3+_pct_of_CD8,supportive,+ immune-compartment depth,19,0.593,0.0075,imm_total_counts
+TNFRSF9+TIM3+_pct_of_CD8,supportive,+ depth and immune fraction,19,0.4842,0.0357,epi_total_counts;immune_fraction
+TNFRSF9+TIM3+_pct_of_CD8,supportive,"+ depth, immune fraction, cell number",19,0.4123,0.0794,epi_total_counts;immune_fraction;n_epi

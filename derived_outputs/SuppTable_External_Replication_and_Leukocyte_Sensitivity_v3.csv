@@ -1,0 +1,16 @@
+cohort,n,apm_definition,model,estimate,ci_low_fisher,ci_high_fisher,ci_low_boot,ci_high_boot,p,loo_min,loo_max,role
+Jiang (GSE60052),79,5-gene (harmonised),Spearman DLL3~APM,-0.2987,-0.4876,-0.0831,-0.4921,-0.0754,0.0074990038769608336,-0.3401,-0.274,EXTERNAL REPLICATION (post hoc)
+George/Cologne (cBioPortal),81,5-gene (harmonised),Spearman DLL3~APM,-0.4111,-0.5776,-0.2118,-0.5809,-0.2084,0.0001374341364734053,-0.4542,-0.3892,EXTERNAL REPLICATION (post hoc)
+Jiang (GSE60052),79,6-gene requested (6 informative),Spearman DLL3~APM,-0.3048,,,,,0.0063177580203584525,,,sensitivity (APM definition)
+George/Cologne (cBioPortal),81,6-gene requested (5 informative),Spearman DLL3~APM,-0.4111,,,,,0.0001374341364734053,,,sensitivity (APM definition)
+Jiang (GSE60052),79,5-gene (harmonised),std OLS APM~DLL3 unadjusted,-0.3686,-0.5795,-0.1577,,,0.0008,,,PRIMARY model
+Jiang (GSE60052),79,5-gene (harmonised),std OLS APM~DLL3 + NE lineage,-0.1626,-0.4275,0.1022,,,0.225,,,sensitivity (post hoc)
+Jiang (GSE60052),79,5-gene (harmonised),std OLS APM~DLL3 + PTPRC,-0.1016,-0.3042,0.101,,,0.3212,,,sensitivity (post hoc)
+Jiang (GSE60052),79,5-gene (harmonised),std OLS APM~DLL3 + NE lineage + PTPRC,0.0687,-0.1538,0.2912,,,0.5401,,,sensitivity (post hoc)
+Jiang (GSE60052),79,-,Spearman DLL3~PTPRC,-0.4001,,,,,0.000258732713434956,,,composition audit (post hoc)
+George/Cologne (cBioPortal),81,5-gene (harmonised),std OLS APM~DLL3 unadjusted,-0.3982,-0.6037,-0.1928,,,0.0002,,,PRIMARY model
+George/Cologne (cBioPortal),81,5-gene (harmonised),std OLS APM~DLL3 + NE lineage,-0.4562,-0.8075,-0.1049,,,0.0116,,,sensitivity (post hoc)
+George/Cologne (cBioPortal),81,5-gene (harmonised),std OLS APM~DLL3 + PTPRC,-0.0935,-0.2398,0.0528,,,0.2071,,,sensitivity (post hoc)
+George/Cologne (cBioPortal),81,5-gene (harmonised),std OLS APM~DLL3 + NE lineage + PTPRC,-0.0991,-0.3477,0.1494,,,0.4295,,,sensitivity (post hoc)
+George/Cologne (cBioPortal),81,-,Spearman DLL3~PTPRC,-0.4231,,,,,8.310971358568928e-05,,,composition audit (post hoc)
+Fixed-effect pooled (Jiang + Cologne),160,5-gene (harmonised),pooled Spearman (Fisher z),-0.3569,-0.4864,-0.2122,,,3.598242197848462e-06,,,EXTERNAL REPLICATION (post hoc)

@@ -1,0 +1,96 @@
+dataset,n,measure,effect,value,ci_low,ci_high,p,sig,extra,role
+Jiang,86,cohort_composition,n_tumor/n_normal,79/7,,,,,GEO file GSE60052_79tumor.7normal.normalized.log2.data,audit
+Jiang_tumor79,79,DLL3~APM_module_z,Spearman_r,-0.3048,-0.5044,-0.0791,0.0063177580203584525,SIG,LOO_min=-0.3472;LOO_max=-0.2795,PRIMARY
+Jiang_tumor79,79,DLL3~APM_raw_log2_mean,Spearman_r,-0.3224,,,0.0037612257851347974,SIG,legacy definition used in v1 manuscript,audit
+Jiang_tumor79,79,DLL3~HLA-A,Spearman_r,-0.1051,,,0.35674068530395386,NS,,PRIMARY
+Jiang_tumor79,79,DLL3~HLA-B,Spearman_r,-0.2424,,,0.03137533171252995,SIG,,PRIMARY
+Jiang_tumor79,79,DLL3~HLA-C,Spearman_r,-0.2814,,,0.011995836961766546,SIG,,PRIMARY
+Jiang_tumor79,79,DLL3~B2M,Spearman_r,-0.4027,,,0.00023371228021280886,SIG,,PRIMARY
+Jiang_tumor79,79,DLL3~TAP1,Spearman_r,-0.0648,,,0.5704728910897111,NS,,PRIMARY
+Jiang_tumor79,79,DLL3~TAP2,Spearman_r,-0.2987,,,0.007497478329851097,SIG,,PRIMARY
+Jiang_tumor79,79,DLL3~CD274,Spearman_r,-0.1987,,,0.0792472605876537,NS,,PRIMARY
+Jiang_tumor79,79,DLL3~TNFRSF9,Spearman_r,-0.1143,,,0.31604636895795096,NS,,PRIMARY
+Jiang_tumor79,79,DLL3~MRC1,Spearman_r,-0.2166,,,0.05525190024962808,NS,,PRIMARY
+Jiang_tumor79,79,DLL3~MARCO,Spearman_r,-0.2888,,,0.009831989276918866,SIG,,PRIMARY
+Jiang_tumor79,79,DLL3~MSR1,Spearman_r,-0.2935,,,0.008660808463761459,SIG,,PRIMARY
+Jiang_tumor79,79,DLL3~CD163,Spearman_r,-0.2146,,,0.057588477258496515,NS,,PRIMARY
+Jiang_tumor79,79,DLL3~M2_module_z,Spearman_r,-0.3968,,,0.00029380926284718067,SIG,,PRIMARY
+Jiang_tumor79,79,APM~DLL3+NE4,std_OLS_beta_DLL3,-0.1859,-0.4513,0.0795,0.16688592385132778,NS,R2=0.2159,PRIMARY
+Jiang_tumor79,79,M2~DLL3+NE4,std_OLS_beta_DLL3,-0.2008,-0.4125,0.0109,0.06266309668961507,NS,R2=0.5011,PRIMARY
+Jiang_tumor79,79,TNFRSF9~effector_module_z,Spearman_r,0.5895,,,1.0881357292096454e-08,SIG,,PRIMARY
+Jiang_tumor79,79,TNFRSF9~exhaustion_module_z,Spearman_r,0.4359,,,5.9417481944960527e-05,SIG,,PRIMARY
+Jiang_all86,86,DLL3~APM_module_z,Spearman_r,-0.417,-0.5923,-0.222,6.481645977058061e-05,SIG,LOO_min=-0.4563;LOO_max=-0.3984,sensitivity
+Jiang_all86,86,DLL3~APM_raw_log2_mean,Spearman_r,-0.4303,,,3.5489689406045474e-05,SIG,legacy definition used in v1 manuscript,audit
+Jiang_all86,86,DLL3~HLA-A,Spearman_r,-0.2219,,,0.04002603202218442,SIG,,sensitivity
+Jiang_all86,86,DLL3~HLA-B,Spearman_r,-0.3535,,,0.0008425434958590363,SIG,,sensitivity
+Jiang_all86,86,DLL3~HLA-C,Spearman_r,-0.3881,,,0.0002225230860389768,SIG,,sensitivity
+Jiang_all86,86,DLL3~B2M,Spearman_r,-0.4964,,,1.1709160480725863e-06,SIG,,sensitivity
+Jiang_all86,86,DLL3~TAP1,Spearman_r,-0.1596,,,0.1420581989395155,NS,,sensitivity
+Jiang_all86,86,DLL3~TAP2,Spearman_r,-0.393,,,0.00018149133756222355,SIG,,sensitivity
+Jiang_all86,86,DLL3~CD274,Spearman_r,-0.2767,,,0.009920949328388247,SIG,,sensitivity
+Jiang_all86,86,DLL3~TNFRSF9,Spearman_r,-0.0785,,,0.47260642259877716,NS,,sensitivity
+Jiang_all86,86,DLL3~MRC1,Spearman_r,-0.3307,,,0.0018744243702073181,SIG,,sensitivity
+Jiang_all86,86,DLL3~MARCO,Spearman_r,-0.4156,,,6.916688347033656e-05,SIG,,sensitivity
+Jiang_all86,86,DLL3~MSR1,Spearman_r,-0.4128,,,7.835563718414455e-05,SIG,,sensitivity
+Jiang_all86,86,DLL3~CD163,Spearman_r,-0.3478,,,0.0010326644618324661,SIG,,sensitivity
+Jiang_all86,86,DLL3~M2_module_z,Spearman_r,-0.4919,,,1.5097538955245271e-06,SIG,,sensitivity
+Jiang_all86,86,APM~DLL3+NE4,std_OLS_beta_DLL3,-0.2132,-0.4654,0.039,0.09647328598358026,NS,R2=0.3355,sensitivity
+Jiang_all86,86,M2~DLL3+NE4,std_OLS_beta_DLL3,-0.1985,-0.3842,-0.0127,0.036562153338373295,SIG,R2=0.6395,sensitivity
+Jiang_all86,86,TNFRSF9~effector_module_z,Spearman_r,0.5209,,,2.7266905432606303e-07,SIG,,sensitivity
+Jiang_all86,86,TNFRSF9~exhaustion_module_z,Spearman_r,0.4246,,,4.603373265303618e-05,SIG,,sensitivity
+Jiang_tumor_vs_normal,86,DLL3_tumor_vs_normal,MannWhitneyU_P,4.497 vs 0.000,,,0.0007163484218111321,SIG,,audit
+Jiang_tumor_vs_normal,86,HLA-A_tumor_vs_normal,MannWhitneyU_P,7.572 vs 9.283,,,0.0011956999456160294,SIG,,audit
+Jiang_tumor_vs_normal,86,HLA-B_tumor_vs_normal,MannWhitneyU_P,7.539 vs 9.736,,,0.0003089004184038621,SIG,,audit
+Jiang_tumor_vs_normal,86,HLA-C_tumor_vs_normal,MannWhitneyU_P,7.338 vs 9.292,,,0.0007638214337521659,SIG,,audit
+Jiang_tumor_vs_normal,86,B2M_tumor_vs_normal,MannWhitneyU_P,8.471 vs 10.653,,,0.00033710036911927254,SIG,,audit
+Jiang_tumor_vs_normal,86,TAP1_tumor_vs_normal,MannWhitneyU_P,6.064 vs 7.051,,,0.0053046671130598045,SIG,,audit
+Jiang_tumor_vs_normal,86,TAP2_tumor_vs_normal,MannWhitneyU_P,4.988 vs 6.279,,,0.0011401366123366848,SIG,,audit
+Discovery,17,cohort_composition,n_sequenced_n_analysed,17/17,,,,,"all 17 SCLC, all DV200>=40; no exclusions",audit
+Discovery,17,CD274_APM_ratio~DLL3,Spearman_r,0.6078,0.1633,0.8632,0.009640347735497311,SIG,LOO_min=0.5294;LOO_max=0.7029,EXPLORATORY
+Discovery,17,CD274_APM_ratio_median_split,MannWhitneyU_P,57.0,,,0.046400658165364046,SIG,,EXPLORATORY
+Discovery,17,DLL3~APM_module_z,Spearman_r,-0.3554,,,0.16154091235760826,NS,,context
+Discovery,17,DLL3~CD274,Spearman_r,0.0956,,,0.7151579154299805,NS,,context
+Discovery,17,TNFRSF9~effector_module_z,Spearman_r,0.7794,,,0.00022569855648436925,SIG,,SECONDARY
+Discovery,17,TNFRSF9~exhaustion_module_z,Spearman_r,0.8578,,,1.0661126185774091e-05,SIG,,SECONDARY
+Discovery,17,CD274_APM_ratio~DLL3+IFNG+NE4_ridge,ridge_beta_DLL3,0.382,,,,,"alpha=1.0, predictors standardized",EXPLORATORY
+Chan_epithelial,19,DLL3~APM_module_z,Spearman_r,0.0404,,,0.8697227104002634,NS,tumour-cell estimand; contrast with bulk tissue estimand,context
+Chan_scRNA,19,DLL3~CD8Texh_pct_of_T,Spearman_r,0.5046,0.0654,0.78,0.027570809598783046,SIG,LOO_min=0.4461;LOO_max=0.6618,PRIMARY
+Chan_scRNA,19,DLL3pctpos~CD8Texh_pct_of_T,Spearman_r,0.3458,,,0.14705605293814786,NS,sensitivity: DLL3 as % positive cells,sensitivity
+Chan_scRNA,19,DLL3~TNFRSF9pos_pct_of_CD8,Spearman_r,0.1053,-0.3665,0.5339,0.6680128800865883,NS,LOO_min=0.0010;LOO_max=0.2281,KEY_NEGATIVE
+Chan_scRNA,19,DLL3pctpos~TNFRSF9pos_pct_of_CD8,Spearman_r,0.2579,,,0.2864302335499624,NS,sensitivity: DLL3 as % positive cells,sensitivity
+Chan_scRNA,19,DLL3~TNFRSF9+PD1+_pct_of_CD8,Spearman_r,0.072,-0.3952,0.5095,0.769707886558922,NS,LOO_min=-0.0341;LOO_max=0.1704,KEY_NEGATIVE
+Chan_scRNA,19,DLL3pctpos~TNFRSF9+PD1+_pct_of_CD8,Spearman_r,0.2203,,,0.36485019976339195,NS,sensitivity: DLL3 as % positive cells,sensitivity
+Chan_scRNA,19,DLL3~TNFRSF9+TIM3+_pct_of_CD8,Spearman_r,0.0422,-0.4201,0.4871,0.8638705997264948,NS,LOO_min=-0.0796;LOO_max=0.1810,KEY_NEGATIVE
+Chan_scRNA,19,DLL3pctpos~TNFRSF9+TIM3+_pct_of_CD8,Spearman_r,0.3462,,,0.14648762320173542,NS,sensitivity: DLL3 as % positive cells,sensitivity
+Chan_scRNA,578,TNFRSF9pos_rate_CD8+ Texh,percent,31.5,,,,,,descriptive
+Chan_scRNA,387,TNFRSF9pos_rate_CD8+ Teff,percent,5.2,,,,,,descriptive
+Chan_scRNA,4320,TNFRSF9pos_rate_CD8+ Tmem,percent,18.2,,,,,,descriptive
+Chan_scRNA,782,TNFRSF9pos_rate_CD4+ Treg,percent,40.4,,,,,,descriptive
+Chan_scRNA,578,Texh_top_donor_share,percent,74.4,,,,,donor=RU1195,audit
+Chan_scRNA,15,pooledCD8_PRIMARY_min3_PD-1,paired_Wilcoxon_median_delta_pp,18.53,,,0.00018310546875,SIG,higher=14/15;rank_biserial=0.967,PRIMARY
+Chan_scRNA,15,pooledCD8_PRIMARY_min3_TIM-3,paired_Wilcoxon_median_delta_pp,26.04,,,6.103515625e-05,SIG,higher=15/15;rank_biserial=1.000,PRIMARY
+Chan_scRNA,15,pooledCD8_PRIMARY_min3_GZMB,paired_Wilcoxon_median_delta_pp,12.94,,,0.04791259765625,SIG,higher=11/15;rank_biserial=0.583,PRIMARY
+Chan_scRNA,18,pooledCD8_sensitivity_min1_PD-1,paired_Wilcoxon_median_delta_pp,22.2,,,4.57763671875e-05,SIG,higher=16/18;rank_biserial=0.974,sensitivity
+Chan_scRNA,18,pooledCD8_sensitivity_min1_TIM-3,paired_Wilcoxon_median_delta_pp,24.95,,,5.340576171875e-05,SIG,higher=16/18;rank_biserial=0.953,sensitivity
+Chan_scRNA,18,pooledCD8_sensitivity_min1_GZMB,paired_Wilcoxon_median_delta_pp,8.34,,,0.3060455322265625,NS,higher=11/18;rank_biserial=0.294,sensitivity
+Chan_scRNA,8,CD8Texh_only_PD-1,paired_Wilcoxon_median_delta_pp,12.7,,,0.578125,NS,higher=5/8;rank_biserial=0.286,stratified
+Chan_scRNA,8,CD8Texh_only_TIM-3,paired_Wilcoxon_median_delta_pp,16.18,,,0.078125,NS,higher=6/8;rank_biserial=0.722,stratified
+Chan_scRNA,8,CD8Texh_only_GZMB,paired_Wilcoxon_median_delta_pp,-6.15,,,0.3828125,NS,higher=3/8;rank_biserial=-0.389,stratified
+Chan_scRNA,3,CD8Teff_only_PD-1,paired_Wilcoxon_median_delta_pp,-7.69,,,1.0,NS,higher=1/3;rank_biserial=0.000,stratified
+Chan_scRNA,3,CD8Teff_only_TIM-3,paired_Wilcoxon_median_delta_pp,44.44,,,0.5,NS,higher=2/3;rank_biserial=0.667,stratified
+Chan_scRNA,3,CD8Teff_only_GZMB,paired_Wilcoxon_median_delta_pp,7.69,,,0.75,NS,higher=2/3;rank_biserial=0.333,stratified
+Chan_scRNA,15,CD8Tmem_only_PD-1,paired_Wilcoxon_median_delta_pp,19.9,,,0.00042724609375,SIG,higher=13/15;rank_biserial=0.933,stratified
+Chan_scRNA,15,CD8Tmem_only_TIM-3,paired_Wilcoxon_median_delta_pp,17.78,,,6.103515625e-05,SIG,higher=15/15;rank_biserial=1.000,stratified
+Chan_scRNA,15,CD8Tmem_only_GZMB,paired_Wilcoxon_median_delta_pp,18.0,,,0.00836181640625,SIG,higher=12/15;rank_biserial=0.750,stratified
+Chan_scRNA,8,INTERACTION_Tmem_minus_Texh_PD-1,paired_Wilcoxon_median_delta_pp,10.46,,,0.3828125,NS,higher_in_Tmem=5/8,KEY_INTERACTION
+Chan_scRNA,8,INTERACTION_Tmem_minus_Texh_TIM-3,paired_Wilcoxon_median_delta_pp,0.71,,,1.0,NS,higher_in_Tmem=4/8,KEY_INTERACTION
+Chan_scRNA,8,INTERACTION_Tmem_minus_Texh_GZMB,paired_Wilcoxon_median_delta_pp,21.28,,,0.0546875,NS,higher_in_Tmem=6/8,KEY_INTERACTION
+Chan_scRNA,19,TNFRSF9pos_lineage_CD8_vs_Treg,Wilcoxon_P,CD8 66% vs Treg 22%,,,0.00823211669921875,SIG,,descriptive
+mIF,10,cohort_composition,n_patients,10,,,,,193 ROIs; selected from 31 patients/632 ROIs,audit
+mIF,10,n_markers_FDR_significant,count,0,,,,,"family size = 51 phenotypes, BH",PRIMARY
+mIF,10,DLL3~CD3+CD8+KI67+,Spearman_r,0.561,,,0.0915777608700657,NS,q=0.8952;FC=4.90,supportive
+mIF,10,DLL3~PDL1+,Spearman_r,0.5427,,,0.1050398937791359,NS,q=0.8952;FC=6.10,supportive
+mIF,10,DLL3~TUMOR+PDL1+,Spearman_r,0.5427,,,0.1050398937791359,NS,q=0.8952;FC=7.31,supportive
+mIF,10,DLL3~FOXP3+,Spearman_r,0.4878,,,0.1526339862783713,NS,q=0.8952;FC=3.74,supportive
+mIF,10,DLL3~CD3+CD4+CD103+,Spearman_r,-0.4198,,,0.2271767909534132,NS,q=0.8952;FC=0.40,supportive
+mIF,10,DLL3~ECAD+,Spearman_r,0.3781,,,0.2814111157974276,NS,q=0.8952;FC=0.98,supportive

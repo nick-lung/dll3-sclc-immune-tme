@@ -1,0 +1,12 @@
+analysis,x,y,n,spearman_r,ci_low,ci_high,bootstrap_ci_low,bootstrap_ci_high,loo_min_r,loo_max_r,p,bh_q,endpoint_role,tost_p_delta_0p5,tost_p_delta_0p3,smallest_equivalence_margin,n_cd8_ge20,r_cd8_ge20,p_cd8_ge20,n_cd8_ge50,r_cd8_ge50,p_cd8_ge50
+Axis1_vs_Axis2_direct,epithelial_APM_z,TNFRSF9pos_pct_of_CD8,19,0.614,0.2216,0.8353,0.1957,0.8601,0.5562,0.6945,0.005162,0.015486,principal exploratory endpoint,,,,17.0,0.6152,0.008576,14.0,0.6132,0.019706
+Axis1_vs_Axis2_direct,epithelial_APM_z,TNFRSF9+PD1+_pct_of_CD8,19,0.4704,0.0206,0.7618,0.0142,0.7845,0.4017,0.5658,0.042111,0.042111,supportive nested endpoint,,,,17.0,0.4414,0.076076,14.0,0.3538,0.21454
+Axis1_vs_Axis2_direct,epithelial_APM_z,TNFRSF9+TIM3+_pct_of_CD8,19,0.5079,0.0698,0.7818,0.0706,0.8073,0.454,0.6153,0.026409,0.039614,supportive nested endpoint,,,,17.0,0.5101,0.036434,14.0,0.5077,0.063839
+Axis1_vs_Axis2_6gene_sensitivity,epithelial_APM_z_6gene_sensitivity,TNFRSF9pos_pct_of_CD8,19,0.6123,0.219,0.8344,,,,,0.005327,,APM-definition sensitivity,,,,,,,,,
+Axis1_vs_Axis2_6gene_sensitivity,epithelial_APM_z_6gene_sensitivity,TNFRSF9+PD1+_pct_of_CD8,19,0.4651,0.0138,0.759,,,,,0.04479,,APM-definition sensitivity,,,,,,,,,
+Axis1_vs_Axis2_6gene_sensitivity,epithelial_APM_z_6gene_sensitivity,TNFRSF9+TIM3+_pct_of_CD8,19,0.4956,0.0534,0.7753,,,,,0.030941,,APM-definition sensitivity,,,,,,,,,
+DLL3_to_epithelial_APM_context,DLL3_mean,epithelial_APM_z_5gene_primary,19,0.0263,-0.4331,0.4748,,,,,0.914838,,primary 5-gene APM context,,,,,,,,,
+DLL3_to_epithelial_APM_context,DLL3_mean,epithelial_APM_z_6gene_sensitivity,19,0.0404,-0.4216,0.4857,,,,,0.869723,,six-gene APM sensitivity context,,,,,,,,,
+DLL3_to_Axis2_equivalence,DLL3_mean,TNFRSF9pos_pct_of_CD8,19,0.1053,-0.3665,0.5339,,,,,0.668013,,bounded null analysis,0.038,0.2074,0.475,,,,,,
+DLL3_to_Axis2_equivalence,DLL3_mean,TNFRSF9+PD1+_pct_of_CD8,19,0.072,-0.3952,0.5095,,,,,0.769708,,bounded null analysis,0.0281,0.1711,0.449,,,,,,
+DLL3_to_Axis2_equivalence,DLL3_mean,TNFRSF9+TIM3+_pct_of_CD8,19,0.0422,-0.4201,0.4871,,,,,0.863871,,bounded null analysis,0.0213,0.1425,0.425,,,,,,

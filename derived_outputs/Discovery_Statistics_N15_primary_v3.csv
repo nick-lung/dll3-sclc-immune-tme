@@ -1,0 +1,21 @@
+population,n,measure,estimate,ci_low,ci_high,p,extra,role
+SCLC15,15,CD274_APM_ratio~DLL3,0.5786,0.0401,0.8869,0.0238,LOO +0.4813 to +0.7231,PRIMARY
+SCLC15,15,CD274_APM_ratio_median_split,46.0,,,0.0401,Mann-Whitney U,PRIMARY
+SCLC15,15,DLL3~APM_module_z,-0.2393,,,0.3904,,PRIMARY
+SCLC15,15,DLL3~M2_module_z,-0.4857,,,0.0664,,PRIMARY
+SCLC15,15,DLL3~CD274,0.2607,,,0.348,,PRIMARY
+SCLC15,15,DLL3~TNFRSF9,-0.0857,,,0.7613,,PRIMARY
+SCLC15,15,DLL3~PTPRC,0.0607,,,0.8298,,PRIMARY
+SCLC15,15,TNFRSF9~effector_module_z,0.7429,,,0.0015094888782350314,tissue-level co-expression,PRIMARY
+SCLC15,15,TNFRSF9~exhaustion_module_z,0.8321,,,0.00011902824493849791,tissue-level co-expression,PRIMARY
+SCLC15,15,CD274_APM_ratio~DLL3+IFNG+NE4,0.2973,-0.6211,1.2157,0.4768,std OLS; R2=0.7404; replaces unreported ridge,PRIMARY
+AllSequenced17,17,CD274_APM_ratio~DLL3,0.6078,0.1457,0.8542,0.0096,LOO +0.5294 to +0.7029,sensitivity (diagnosis-inclusive)
+AllSequenced17,17,CD274_APM_ratio_median_split,57.0,,,0.0464,Mann-Whitney U,sensitivity (diagnosis-inclusive)
+AllSequenced17,17,DLL3~APM_module_z,-0.3554,,,0.1615,,sensitivity (diagnosis-inclusive)
+AllSequenced17,17,DLL3~M2_module_z,-0.5319,,,0.028,,sensitivity (diagnosis-inclusive)
+AllSequenced17,17,DLL3~CD274,0.0956,,,0.7152,,sensitivity (diagnosis-inclusive)
+AllSequenced17,17,DLL3~TNFRSF9,-0.1985,,,0.445,,sensitivity (diagnosis-inclusive)
+AllSequenced17,17,DLL3~PTPRC,-0.0637,,,0.808,,sensitivity (diagnosis-inclusive)
+AllSequenced17,17,TNFRSF9~effector_module_z,0.7794,,,0.00022569855648436925,tissue-level co-expression,sensitivity (diagnosis-inclusive)
+AllSequenced17,17,TNFRSF9~exhaustion_module_z,0.8578,,,1.0661126185774091e-05,tissue-level co-expression,sensitivity (diagnosis-inclusive)
+AllSequenced17,17,CD274_APM_ratio~DLL3+IFNG+NE4,0.5272,-0.368,1.4223,0.2188,std OLS; R2=0.7146; replaces unreported ridge,sensitivity (diagnosis-inclusive)

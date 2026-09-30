@@ -1,0 +1,18 @@
+sample_id,adjudicated_diagnosis,in_primary_analysis_set,exclusion_reason
+21029B2857,SCLC,True,
+21029B2858,SCLC,True,
+21029B2859,SCLC,True,
+21029B2860,SCLC,True,
+21029B2861,SCLC,True,
+21029B2862,SCLC,True,
+21029B2864,SCLC,True,
+21029B2865,SCLC,True,
+21029B2866,LC-NEC (large-cell neuroendocrine carcinoma),False,Diagnosis: LC-NEC on pathology adjudication (2026-08-06)
+21029T2945,SCLC,True,
+21029T2946,SCLC,True,
+21029T2947,SCLC,True,
+21029T2950,SCLC,True,
+21029T2951,SCLC,True,
+21029T2952,LC-NEC (large-cell neuroendocrine carcinoma),False,Diagnosis: LC-NEC on pathology adjudication (2026-08-06)
+21029T2953,SCLC,True,
+21029T2954,SCLC,True,
