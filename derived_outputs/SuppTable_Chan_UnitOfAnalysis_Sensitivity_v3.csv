@@ -1,0 +1,9 @@
+comparison,unit_of_analysis,n,spearman_r,p,note
+epithelial APM vs TNFRSF9+ %CD8,per donor (published primary unit),19,0.614,0.005161852692152183,primary analysis reported in the manuscript
+tumour DLL3 vs TNFRSF9+ %CD8,per donor (published primary unit),19,0.1053,0.6680128800865883,primary analysis reported in the manuscript
+epithelial APM vs TNFRSF9+ %CD8,per biospecimen (donors repeat; not independent),23,0.5292,0.009418517361955262,sensitivity analysis
+tumour DLL3 vs TNFRSF9+ %CD8,per biospecimen (donors repeat; not independent),23,0.1316,0.5496181783520593,sensitivity analysis
+epithelial APM vs TNFRSF9+ %CD8,"per donor, single-biospecimen donors only",16,0.5353,0.03261586329402191,sensitivity analysis
+tumour DLL3 vs TNFRSF9+ %CD8,"per donor, single-biospecimen donors only",16,0.0,1.0,sensitivity analysis
+epithelial APM vs TNFRSF9+ %CD8,one biospecimen per donor (most epithelial cells),19,0.6456,0.002830188983053137,sensitivity analysis
+tumour DLL3 vs TNFRSF9+ %CD8,one biospecimen per donor (most epithelial cells),19,0.1439,0.5568219628907942,sensitivity analysis

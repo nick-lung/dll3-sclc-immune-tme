@@ -75,37 +75,37 @@ def figure1():
     # (A) RNA-seq flow
     ax = fig.add_subplot(gs[0, 0]); ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.axis("off")
     panel(ax, "A", "Institutional bulk RNA-seq")
-    box(ax, .18, .84, .64, .12, "17 tumour specimens sequenced\n(CellCarta P1947, all DV200 ≥ 40)")
-    arrow(ax, .5, .84, .5, .70)
-    box(ax, .46, .58, .52, .12,
+    box(ax, .08, .84, .84, .12, "17 tumour specimens sequenced\n(CellCarta P1947, all DV200 ≥ 40)")
+    arrow(ax, .5, .83, .5, .77)
+    box(ax, .08, .60, .84, .16,
         "Excluded on pathology adjudication: 2\n21029B2866, 21029T2952 → LC-NEC",
         fc="#FBEDED", ec=RED)
-    box(ax, .10, .44, .58, .12, "PRIMARY ANALYSIS SET\n15 pathologically confirmed SCLC",
+    arrow(ax, .5, .59, .5, .50)
+    box(ax, .08, .36, .84, .13, "PRIMARY ANALYSIS SET\n15 pathologically confirmed SCLC",
         fc="#E6F0E9", ec=GREEN, weight="bold")
-    arrow(ax, .5, .58, .39, .56)
-    arrow(ax, .39, .44, .39, .30)
-    box(ax, .10, .18, .58, .12, "Subset with DLL3 IHC H-score: 10\n(= the mIF analysis cohort)")
-    ax.text(.5, .06, "The 17-specimen set is retained as a sensitivity analysis",
-            ha="center", fontsize=6.0, style="italic", color=GREY)
+    arrow(ax, .5, .35, .5, .26)
+    box(ax, .08, .12, .84, .13, "Subset with DLL3 IHC H-score: 10\n(= the mIF analysis cohort)")
+    ax.text(.5, .025, "The 17-specimen set is retained\nas a sensitivity analysis",
+            ha="center", va="center", fontsize=6.0, style="italic", color=GREY)
 
     # (B) mIF flow
     ax = fig.add_subplot(gs[0, 1]); ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.axis("off")
     panel(ax, "B", "Institutional multiplex immunofluorescence")
-    box(ax, .04, .86, .44, .10, "Archival batch\n15 patients / 372 ROIs", fs=6.3)
-    box(ax, .52, .86, .44, .10, "Prospective batch\n16 patients / 260 ROIs", fs=6.3)
-    arrow(ax, .26, .86, .26, .74)
-    box(ax, .02, .62, .48, .12, "EXCLUDED in full\nno DLL3 H-score;\n6 of 15 are LC-NEC",
+    box(ax, .04, .84, .42, .12, "Archival batch\n15 patients / 372 ROIs", fs=6.3)
+    box(ax, .54, .84, .42, .12, "Prospective batch\n16 patients / 260 ROIs", fs=6.3)
+    arrow(ax, .25, .83, .25, .76)
+    box(ax, .04, .48, .42, .27, "EXCLUDED in full\nno DLL3 H-score;\n6 of 15 are LC-NEC",
         fc="#FBEDED", ec=RED, fs=6.0)
-    arrow(ax, .74, .86, .74, .74)
-    box(ax, .52, .62, .46, .12,
-        "Excluded by diagnosis: 1\n(21029B2866, LC-NEC)\nExcluded, no H-score: 5 (67 ROIs)",
+    arrow(ax, .75, .83, .75, .76)
+    box(ax, .54, .48, .42, .27,
+        "Excluded by diagnosis: 1\n(21029B2866, LC-NEC)\n\nExcluded, no H-score: 5\n(67 ROIs)",
         fc="#FBEDED", ec=RED, fs=6.0)
-    arrow(ax, .74, .62, .74, .48)
-    box(ax, .30, .34, .60, .13, "mIF ANALYSIS SET\n10 patients / 193 ROIs\n(ROIs per patient 1–38, median 17)",
+    arrow(ax, .75, .47, .75, .36)
+    box(ax, .12, .17, .82, .18, "mIF ANALYSIS SET\n10 patients / 193 ROIs\n(ROIs per patient 1–38, median 17)",
         fc="#E6F0E9", ec=GREEN, fs=6.3, weight="bold")
-    ax.text(.5, .18, "All 10 are a subset of the 15 RNA-sequenced SCLC patients:\n"
+    ax.text(.5, .045, "All 10 are a subset of the 15 RNA-sequenced SCLC patients:\n"
                      "the two institutional analyses are not independent",
-            ha="center", fontsize=6.0, style="italic", color=GREY)
+            ha="center", va="center", fontsize=6.0, style="italic", color=GREY)
 
     # (C) external datasets
     ax = fig.add_subplot(gs[1, :]); ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.axis("off")
@@ -139,11 +139,12 @@ def figure2():
     mt = pd.read_csv(os.path.join(SRC, "Meta_TwoExternalCohorts_v3.csv")).iloc[0]
 
     fig = plt.figure(figsize=(7.2, 7.4))
+    # external cohorts first (A-D, cited first in Results), institutional cohort last (E-G)
     gs = fig.add_gridspec(3, 3, hspace=0.52, wspace=0.42,
-                          height_ratios=[1, 1, 1.05])
+                          height_ratios=[1, 1.05, 1])
 
-    # (A) discovery scatter, rank axes
-    ax = fig.add_subplot(gs[0, 0])
+    # (E) discovery scatter, rank axes
+    ax = fig.add_subplot(gs[2, 0])
     rx, ry = stats.rankdata(disc.DLL3_log2), stats.rankdata(disc.CD274_APM_ratio)
     r, p = stats.spearmanr(disc.DLL3_log2, disc.CD274_APM_ratio)
     ax.scatter(rx, ry, s=26, c=BLUE, edgecolor="#12314A", lw=.5, zorder=3)
@@ -153,11 +154,11 @@ def figure2():
     ax.set_ylabel("CD274/APM ratio (rank)", fontsize=7)
     ax.text(.04, .93, f"$r$ = {r:+.3f}\n$P$ = {p:.3f}", transform=ax.transAxes,
             fontsize=6.6, va="top")
-    panel(ax, "A", "Discovery, $N$ = 15 SCLC")
+    panel(ax, "E", "Discovery, $N$ = 15 SCLC")
     ax.tick_params(labelsize=6.3)
 
-    # (B) LOO
-    ax = fig.add_subplot(gs[0, 1])
+    # (F) LOO
+    ax = fig.add_subplot(gs[2, 1])
     loo = [stats.spearmanr(np.delete(disc.DLL3_log2.values, i),
                            np.delete(disc.CD274_APM_ratio.values, i)).statistic
            for i in range(len(disc))]
@@ -169,11 +170,11 @@ def figure2():
     ax.set_ylim(0, .8)
     ax.text(.04, .93, f"all 15 iterations positive\n({min(loo):+.3f} to {max(loo):+.3f})",
             transform=ax.transAxes, fontsize=6.2, va="top")
-    panel(ax, "B", "Leave-one-out")
+    panel(ax, "F", "Leave-one-out")
     ax.tick_params(labelsize=6.3)
 
-    # (C) adjudication sensitivity
-    ax = fig.add_subplot(gs[0, 2])
+    # (G) adjudication sensitivity
+    ax = fig.add_subplot(gs[2, 2])
     r17, p17 = stats.spearmanr(d17.DLL3_log2, d17.CD274_APM_ratio)
     ests, los, his = [], [], []
     for rr, nn in [(r, 15), (r17, 17)]:
@@ -184,17 +185,17 @@ def figure2():
     ax.scatter(ests, y, s=[70, 50], c=[GREEN, GREY], zorder=3, edgecolor="#111", lw=.6)
     ax.axvline(0, color="#888", lw=.8, ls="--")
     ax.set_yticks(y)
-    ax.set_yticklabels(["$N$ = 15\n(primary,\nadjudicated SCLC)", "$N$ = 17\n(sensitivity,\ndiagnosis-inclusive)"],
+    ax.set_yticklabels(["$N$ = 15\n(primary)", "$N$ = 17\n(sensitivity)"],
                        fontsize=6.0)
     ax.set_xlabel("Spearman $r$", fontsize=7)
     ax.set_ylim(-.6, 1.6)
-    panel(ax, "C", "Pathology adjudication")
+    panel(ax, "G", "Pathology adjudication")
     ax.tick_params(labelsize=6.3)
 
-    # (D) Jiang scatter  (E) Cologne scatter
+    # (A) Jiang scatter  (B) Cologne scatter
     for i, (dat, lab, key) in enumerate([(jia, "Jiang (GSE60052), $n$ = 79", "APM_z_5gene"),
                                          (col, "George/Cologne, $n$ = 81", "APM_z_5gene")]):
-        ax = fig.add_subplot(gs[1, i])
+        ax = fig.add_subplot(gs[0, i])
         x, yv = stats.rankdata(dat.DLL3_log2), stats.rankdata(dat[key])
         rr, pp = stats.spearmanr(dat.DLL3_log2, dat[key])
         ax.scatter(x, yv, s=13, c=BLUE, edgecolor="#12314A", lw=.35, alpha=.85, zorder=3)
@@ -203,11 +204,11 @@ def figure2():
         ax.set_xlabel("DLL3 (rank)", fontsize=7)
         ax.set_ylabel("APM module, 5-gene (rank)", fontsize=7)
         ax.text(.04, .12, f"$r$ = {rr:+.3f}\n$P$ = {pp:.1e}", transform=ax.transAxes, fontsize=6.6)
-        panel(ax, "DE"[i], lab)
+        panel(ax, "AB"[i], lab)
         ax.tick_params(labelsize=6.3)
 
-    # (F) meta forest, one interval method
-    ax = fig.add_subplot(gs[1, 2])
+    # (C) meta forest, one interval method
+    ax = fig.add_subplot(gs[0, 2])
     rJ = stats.spearmanr(jia.DLL3_log2, jia.APM_z_5gene).statistic
     rC = stats.spearmanr(col.DLL3_log2, col.APM_z_5gene).statistic
     est = [rJ, rC, float(mt.pooled_r)]
@@ -226,11 +227,11 @@ def figure2():
     ax.set_ylim(-.6, 2.6)
     ax.text(.03, -.30, "Fisher $z$ intervals throughout; heterogeneity not detectable ($k$ = 2)",
             transform=ax.transAxes, fontsize=5.8, color=GREY)
-    panel(ax, "F", "External replication")
+    panel(ax, "C", "External replication")
     ax.tick_params(labelsize=6.3)
 
-    # (G) stepwise adjustment, ONE estimand scale
-    ax = fig.add_subplot(gs[2, :])
+    # (D) stepwise adjustment, ONE estimand scale
+    ax = fig.add_subplot(gs[1, :])
     models = ["unadjusted", "+ NE lineage", "+ PTPRC", "+ NE lineage + PTPRC"]
     coh = {"Jiang (GSE60052)": BLUE, "George/Cologne (cBioPortal)": "#C4762A"}
     h = 0.34
@@ -257,14 +258,14 @@ def figure2():
     ax.legend(fontsize=6.4, loc="lower left", frameon=False)
     ax.text(.985, .06, "PTPRC models are post hoc", transform=ax.transAxes,
             fontsize=6.0, style="italic", color=GREY, ha="right")
-    panel(ax, "G", "Stepwise multivariable adjustment in both cohorts, one estimand")
+    panel(ax, "D", "Stepwise multivariable adjustment in both cohorts, one estimand")
     ax.tick_params(labelsize=6.3)
 
     save(fig, "Figure2_v3_Antigen_Presentation_and_Leukocyte_Content")
 
 
-# ================================================================ FIGURE 4
-def figure4():
+# ================================================================ FIGURE 5
+def figure5():
     ax_s = pd.read_csv(os.path.join(SRC, "SuppTable_Axis1_vs_Axis2_and_Equivalence_v3.csv"))
     a12 = ax_s[ax_s.analysis == "Axis1_vs_Axis2_direct"]
     a12_main = a12[a12.endpoint_role == "principal exploratory endpoint"].iloc[0]
@@ -307,8 +308,8 @@ def figure4():
             "association NOT demonstrated\n"
             f"$r$ = {eqv.spearman_r.min():+.3f} to {eqv.spearman_r.max():+.3f}, all $P$ > 0.6\n"
             f"equivalence supported only within\n"
-            f"|ρ| ≈ {eqv.smallest_equivalence_margin.min():.2f} to "
-            f"{eqv.smallest_equivalence_margin.max():.2f}\n"
+            f"|ρ| = {eqv.smallest_equivalence_margin.min():.3f} to "
+            f"{eqv.smallest_equivalence_margin.max():.3f}\n"
             "a moderate association remains possible",
             fontsize=6.2, color=GREY, ha="left", va="center")
 
@@ -325,15 +326,14 @@ def figure4():
             fontsize=5.9, color=GREEN, ha="left", va="center", weight="bold")
 
     ax.text(.5, .035,
-            "The proposition that DLL3-high tumours are enriched at baseline for a reinvigorable T-cell compartment is an untested assumption, "
-            "not a supported premise.\nThese baseline cross-sectional data do not test the mechanism or merit of DLL3-directed plus checkpoint-directed combination therapy.",
+            "These baseline cross-sectional data do not test the mechanism or merit of DLL3-directed plus checkpoint-directed combination therapy.",
             ha="center", fontsize=6.0, style="italic", color="#333333")
-    save(fig, "Figure4_v3_What_Is_And_Is_Not_Established")
+    save(fig, "Figure5_v3_What_Is_And_Is_Not_Established")
 
 
 if __name__ == "__main__":
     print("Generating v3 main figures ->", FIG)
     figure1()
     figure2()
-    figure4()
+    figure5()
     print("done")

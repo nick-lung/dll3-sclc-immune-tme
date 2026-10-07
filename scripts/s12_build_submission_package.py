@@ -43,13 +43,14 @@ md_to_docx(LEG_MD, os.path.join(PKG, "03_Figure_Legends.docx"))
 FIGS = {1: "Figure1_v3_Study_Design_and_Cohort_Flow",
         2: "Figure2_v3_Antigen_Presentation_and_Leukocyte_Content",
         3: "Figure3_v3_TNFRSF9_CD8_Phenotype",
-        4: "Figure4_v3_What_Is_And_Is_Not_Established"}
+        4: "Figure4_v3_Epithelial_APM_and_TNFRSF9_CD8",
+        5: "Figure5_v3_What_Is_And_Is_Not_Established"}
 for n, stem in FIGS.items():
     for ext in ("pdf", "tiff"):
         shutil.copy2(os.path.join(V3, "figures", f"{stem}.{ext}"), os.path.join(PKG, "04_Figures", f"Figure{n}.{ext}"))
-shutil.copy2(os.path.join(V3, "figures", FIGS[4] + ".pdf"), os.path.join(PKG, "07_Graphical_Abstract_candidate_Figure4.pdf"))
-for src, dst in [("Table1_v3_Key_Results_CrossPlatform_Statistics.docx", "Table1.docx"),
-                 ("Table2_v3_Questions_and_Dataset_Roles.docx", "Table2.docx")]:
+shutil.copy2(os.path.join(V3, "figures", "Graphical_Abstract_v3.pdf"),
+             os.path.join(PKG, "07_Graphical_Abstract.pdf"))
+for src, dst in [("Table1_v3_Questions_and_Dataset_Roles.docx", "Table1.docx")]:
     shutil.copy2(os.path.join(V3, "tables", src), os.path.join(PKG, "05_Tables", dst))
 
 # 3. supplementary figures S1-S10 with legends, one PDF ---------------------------------------
@@ -76,7 +77,7 @@ legends = {int(m.group(1)): m.group(0).strip()
 assert sorted(legends) == list(range(1, 11)), sorted(legends)
 W, H = A4
 story = [Paragraph("Supplementary Figures S1–S10", head),
-         Paragraph(md_inline("Patient-level relationships among DLL3, antigen-presentation signals, and a *TNFRSF9*-defined CD8 T-cell phenotype in small cell lung cancer. Kobayashi et al."), body),
+         Paragraph(md_inline("DLL3 expression and its associations with antigen-presentation genes and *TNFRSF9*-expressing CD8 T cells in small cell lung cancer. Kobayashi et al."), body),
          PageBreak()]
 figdir = os.path.join(V3, "figures")
 for n in range(1, 11):

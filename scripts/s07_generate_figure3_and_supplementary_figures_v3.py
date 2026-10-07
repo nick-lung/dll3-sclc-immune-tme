@@ -107,8 +107,8 @@ def figure3():
     fig = plt.figure(figsize=(7.6, 7.6))
     gs = fig.add_gridspec(3, 3, hspace=0.72, wspace=0.52)
 
-    # A: DLL3 vs Texh fraction, rank axes
-    ax = fig.add_subplot(gs[0, 0])
+    # F: DLL3 vs Texh fraction, rank axes (cited with G in the DLL3 section)
+    ax = fig.add_subplot(gs[1, 2])
     x, y = per.DLL3_mean.values, per.CD8Texh_pct_of_T.values
     rx, ry = stats.rankdata(x), stats.rankdata(y)
     r, p = stats.spearmanr(x, y)
@@ -117,13 +117,14 @@ def figure3():
     ax.plot([1, len(rx)], [m + b, m * len(rx) + b], color=RED, lw=1.2)
     ax.set_xlabel("Tumour DLL3 (rank)", fontsize=7)
     ax.set_ylabel("CD8$^+$ Texh fraction (rank)", fontsize=7)
-    ax.text(.04, .95, f"$r$ = {r:+.3f}, $P$ = {p:.3f}\nfragile: see Results",
+    ax.set_yticks([1, 5, 10, 15, 19]); ax.set_ylim(-0.5, 23.5)   # headroom for the label
+    ax.text(.04, .95, f"$r$ = {r:+.3f}, $P$ = {p:.3f}",
             transform=ax.transAxes, fontsize=6.2, va="top")
-    panel(ax, "A", "Composition association")
+    panel(ax, "F", "Composition association")
     ax.tick_params(labelsize=6.3)
 
-    # B: TNFRSF9 positivity by subtype
-    ax = fig.add_subplot(gs[0, 1])
+    # A: TNFRSF9 positivity by subtype
+    ax = fig.add_subplot(gs[0, 0])
     subs = CD8 + ["CD4+ Treg"]
     rates = [cell[cell.ct == s].TNFRSF9_pos.mean() * 100 for s in subs]
     ns = [int((cell.ct == s).sum()) for s in subs]
@@ -136,12 +137,12 @@ def figure3():
                        fontsize=6.2, rotation=20, ha="right")
     ax.set_ylabel("$TNFRSF9^+$ cells (%)", fontsize=7)
     ax.set_ylim(0, max(rates) * 1.35)
-    panel(ax, "B", "$TNFRSF9$ by subtype")
+    panel(ax, "A", "$TNFRSF9$ by subtype")
     ax.tick_params(labelsize=6.3)
 
-    # C: paired OBSERVED values per donor (not pinned to zero)
+    # B, C: paired OBSERVED values per donor (not pinned to zero)
     for i, lab in enumerate(["PD-1", "TIM-3"]):
-        ax = fig.add_subplot(gs[0, 2] if i == 0 else gs[1, 0])
+        ax = fig.add_subplot(gs[0, 1] if i == 0 else gs[0, 2])
         for _, row in paired.iterrows():
             ax.plot([0, 1], [row[f"{lab}_neg"], row[f"{lab}_pos"]], "-",
                     color=BLUE if row[f"{lab}_pos"] > row[f"{lab}_neg"] else RED,
@@ -155,11 +156,11 @@ def figure3():
         ax.set_ylabel(f"{lab}$^+$ cells (% of CD8)", fontsize=7)
         ax.text(.03, .95, f"{higher}/{len(paired)} higher\nWilcoxon $P$ = {pv:.1e}",
                 transform=ax.transAxes, fontsize=6.2, va="top")
-        panel(ax, "C" if i == 0 else "D", f"{lab}, paired", fs=8.0)
+        panel(ax, "B" if i == 0 else "C", f"{lab}, paired", fs=8.0)
         ax.tick_params(labelsize=6.3)
 
-    # E: per-donor lineage distribution (not a pie)
-    ax = fig.add_subplot(gs[1, 1])
+    # D: per-donor lineage distribution (not a pie)
+    ax = fig.add_subplot(gs[1, 0])
     TC = [c for c in cell.ct.unique() if c in CD8 + ["CD4+ Tconv", "CD4+ Treg", "Tgd"]]
     tn = cell[cell.TNFRSF9_pos & cell.ct.isin(TC)]
     lin = tn.assign(lin=np.where(tn.ct.isin(CD8), "CD8", np.where(tn.ct == "CD4+ Treg", "Treg", "Other")))
@@ -183,11 +184,11 @@ def figure3():
     ax.set_ylim(-8, 118)
     ax.text(.03, .99, f"CD8 {pc['CD8'].median():.0f}% vs Treg {pc['Treg'].median():.0f}%\n"
                       f"$P$ = {pw:.4f}", transform=ax.transAxes, fontsize=6.0, va="top")
-    panel(ax, "E", "Lineage of $TNFRSF9^+$", fs=8.0)
+    panel(ax, "D", "Lineage of $TNFRSF9^+$", fs=8.0)
     ax.tick_params(labelsize=6.3)
 
-    # F: bulk TNFRSF9 vs modules
-    ax = fig.add_subplot(gs[1, 2])
+    # E: bulk TNFRSF9 vs modules
+    ax = fig.add_subplot(gs[1, 1])
     vals = [(+0.743, "Discovery\neffector"), (+0.832, "Discovery\nexhaustion"),
             (+0.590, "Jiang\neffector"), (+0.436, "Jiang\nexhaustion")]
     nn = [15, 15, 79, 79]
@@ -202,9 +203,7 @@ def figure3():
     ax.set_yticks(yy); ax.set_yticklabels([v[1] for v in vals], fontsize=6.2)
     ax.set_xlabel("Spearman $r$", fontsize=7)
     ax.set_xlim(-.1, 1.05)
-    ax.text(.03, -.40, "tissue-level co-expression,\nnot single-cell",
-            transform=ax.transAxes, fontsize=5.8, color=GREY)
-    panel(ax, "F", "Bulk $TNFRSF9$", fs=8.0)
+    panel(ax, "E", "Bulk $TNFRSF9$", fs=8.0)
     ax.tick_params(labelsize=6.3)
 
     # G: the central null with equivalence bound
@@ -229,22 +228,103 @@ def figure3():
     for i, row in eq.iterrows():
         ax.text(row.spearman_r, yy[i] + .24, f"$r$ = {row.spearman_r:+.3f}, $P$ = {row.p:.2f}",
                 ha="center", fontsize=6.2)
-    ax.text(.5, -.42, f"Shaded band and dotted lines: the equivalence bound the data support "
-                      f"(|ρ| ≈ {eq.smallest_equivalence_margin.min():.2f}–"
-                      f"{eq.smallest_equivalence_margin.max():.2f}). "
-                      f"A moderate association is NOT excluded.",
-            transform=ax.transAxes, ha="center", fontsize=6.4, color=RED)
-    panel(ax, "G", "No association detected between DLL3 and this phenotype — with the bound stated")
+    panel(ax, "G", "DLL3 expression and proportions of $TNFRSF9$-expressing CD8 T cells")
     ax.tick_params(labelsize=6.3)
 
     save(fig, "Figure3_v3_TNFRSF9_CD8_Phenotype")
 
 
 # ================================================================== SUPP FIGS
+
+# ================================================================== FIGURE 4
+def figure4():
+    """Epithelial APM versus TNFRSF9+ CD8 abundance in the same donors: the principal post hoc
+    endpoint (A), its stability and that of the nested endpoints across every sensitivity
+    analysis reported in the text (B), and DLL3 versus the same epithelial APM score (C)."""
+    conf = pd.read_csv(os.path.join(SRC, "SuppTable_Axis_ConfounderSensitivity_v3.csv"))
+    unit = pd.read_csv(os.path.join(SRC, "SuppTable_Chan_UnitOfAnalysis_Sensitivity_v3.csv"))
+    d5 = axeq[axeq.analysis == "Axis1_vs_Axis2_direct"].set_index("y")
+    d6 = axeq[axeq.analysis == "Axis1_vs_Axis2_6gene_sensitivity"].set_index("y")
+    ctx = axeq[(axeq.analysis == "DLL3_to_epithelial_APM_context")
+               & (axeq.y == "epithelial_APM_z_5gene_primary")].iloc[0]
+    prin = d5.loc["TNFRSF9pos_pct_of_CD8"]
+
+    fig = plt.figure(figsize=(7.6, 2.9))
+    gs = fig.add_gridspec(1, 3, width_ratios=[1, 1.1, 1], wspace=1.0)
+
+    def rank_scatter(ax, x, y, colour, edge, solid):
+        rx, ry = stats.rankdata(x), stats.rankdata(y)
+        ax.scatter(rx, ry, s=22, c=colour, edgecolor=edge, lw=.5, zorder=3)
+        m, b = np.polyfit(rx, ry, 1)
+        ax.plot([1, len(rx)], [m + b, m * len(rx) + b], color=RED if solid else "#999999",
+                lw=1.2, ls="-" if solid else "--")
+        ax.set_xticks([1, 5, 10, 15, 19]); ax.set_yticks([1, 5, 10, 15, 19])
+        ax.set_ylim(-0.5, 25)   # headroom so the statistics never cover a donor
+        ax.tick_params(labelsize=6.3)
+
+    # (A) principal endpoint
+    ax = fig.add_subplot(gs[0, 0])
+    rank_scatter(ax, per.epithelial_APM_z_5gene_primary, per.TNFRSF9pos_pct_of_CD8, GREEN, "#12492c", True)
+    ax.set_xlabel("Epithelial APM score (rank)", fontsize=7)
+    ax.set_ylabel("$TNFRSF9^+$ cells, % of CD8$^+$ (rank)", fontsize=7)
+    ax.text(.04, .96, f"$r$ = {prin.spearman_r:+.3f}\n95% CI {prin.ci_low:+.3f} to {prin.ci_high:+.3f}\n"
+                      f"BH $q$ = {prin.bh_q:.3f}", transform=ax.transAxes, fontsize=6.2, va="top")
+    panel(ax, "A", "Principal endpoint, 19 donors", fs=7.6)
+
+    # (B) every sensitivity analysis reported in Results, three endpoints
+    ax = fig.add_subplot(gs[0, 1])
+    eps = [("TNFRSF9pos_pct_of_CD8", "$TNFRSF9^+$ (principal)", GREEN, "o"),
+           ("TNFRSF9+TIM3+_pct_of_CD8", "$TNFRSF9^+$TIM-3$^+$", ORANGE, "s"),
+           ("TNFRSF9+PD1+_pct_of_CD8", "$TNFRSF9^+$PD-1$^+$", BLUE, "D")]
+    adj = conf[conf.model == "+ depth and immune fraction"].set_index("y")
+    rows = ["All donors (19)", "≥20 CD8$^+$ cells (17)", "≥50 CD8$^+$ cells (14)",
+            "Six-gene APM (19)", "Depth + immune fraction (19)", "Per biospecimen (23)",
+            "Single-biospecimen (16)", "One per donor (19)"]
+    def vals(y):
+        r = d5.loc[y]
+        out = [(r.spearman_r, r.p), (r.r_cd8_ge20, r.p_cd8_ge20), (r.r_cd8_ge50, r.p_cd8_ge50),
+               (d6.loc[y].spearman_r, d6.loc[y].p), (adj.loc[y].partial_spearman_r, adj.loc[y].p)]
+        if y == "TNFRSF9pos_pct_of_CD8":
+            u = unit[unit.comparison == "epithelial APM vs TNFRSF9+ %CD8"].set_index("unit_of_analysis")
+            for k in ["per biospecimen (donors repeat; not independent)",
+                      "per donor, single-biospecimen donors only",
+                      "one biospecimen per donor (most epithelial cells)"]:
+                out.append((u.loc[k].spearman_r, u.loc[k].p))
+        return out
+    ypos = np.arange(len(rows))[::-1]
+    for j, (y, lab, col, mk) in enumerate(eps):
+        off = (1 - j) * 0.22
+        for i, (r, p) in enumerate(vals(y)):
+            ax.scatter(r, ypos[i] + off, s=26, marker=mk, zorder=3, lw=.8,
+                       facecolor=col if p < 0.05 else "white", edgecolor=col,
+                       label=lab if i == 0 else None)
+    ax.axvline(0, color="#888", lw=.8, ls="--")
+    ax.axhspan(ypos[4] - .5, ypos[-1] - .5, color="#F2F2F2", zorder=0)
+    ax.set_yticks(ypos); ax.set_yticklabels(rows, fontsize=6.2)
+    ax.set_xlim(-.05, .85); ax.set_ylim(-.7, len(rows) - .3)
+    ax.set_xlabel("Spearman $r$ with epithelial APM score", fontsize=7)
+    ax.tick_params(axis="x", labelsize=6.3)
+    ax.legend(fontsize=5.8, frameon=False, loc="upper center", bbox_to_anchor=(0.35, -0.17),
+              ncol=3, handletextpad=.2, columnspacing=.8,
+              title="filled, $P$ < 0.05; open, $P$ ≥ 0.05", title_fontsize=5.8)
+    panel(ax, "B", "Sensitivity analyses", fs=7.6)
+
+    # (C) DLL3 versus the same epithelial APM score
+    ax = fig.add_subplot(gs[0, 2])
+    rank_scatter(ax, per.DLL3_mean, per.epithelial_APM_z_5gene_primary, GREY, "#444444", False)
+    ax.set_xlabel("Tumour DLL3 (rank)", fontsize=7)
+    ax.set_ylabel("Epithelial APM score (rank)", fontsize=7)
+    ax.text(.04, .96, f"$r$ = {ctx.spearman_r:+.3f}\n$P$ = {ctx.p:.2f}", transform=ax.transAxes,
+            fontsize=6.2, va="top")
+    panel(ax, "C", "DLL3 and epithelial APM", fs=7.6)
+
+    save(fig, "Figure4_v3_Epithelial_APM_and_TNFRSF9_CD8")
+
+
 def suppS1_S2():
     d15 = pd.read_csv(os.path.join(SRC, "Plotdata_Discovery_SCLC15_v3.csv"))
     stat = pd.read_csv(os.path.join(SRC, "Discovery_Statistics_N15_primary_v3.csv"))
-    # S1: discovery cohort key statistics, N=15 vs N=17
+    # S3: discovery cohort key statistics, N=15 vs N=17
     p15 = stat[stat.population == "SCLC15"]
     p17 = stat[stat.population == "AllSequenced17"]
     keys = [m for m in p15.measure if m in set(p17.measure) and "median_split" not in m]
@@ -263,13 +343,13 @@ def suppS1_S2():
     ax.set_xlabel("Effect estimate (Spearman $r$, or standardized OLS β for the adjusted model)",
                   fontsize=7.2)
     ax.legend(fontsize=6.4, loc="lower right", frameon=False)
-    ax.set_title("Supplementary Figure S1. Institutional discovery cohort: every key statistic "
+    ax.set_title("Supplementary Figure S3. Institutional discovery cohort: every key statistic "
                  "under the\nprimary (N = 15) and diagnosis-inclusive sensitivity (N = 17) "
                  "populations", fontsize=8, loc="left", weight="bold")
     ax.tick_params(labelsize=6.3)
-    save(fig, "SuppFigureS1_v3_Discovery_Adjudication_Sensitivity")
+    save(fig, "SuppFigureS3_v3_Discovery_Adjudication_Sensitivity")
 
-    # S2: discovery correlation heatmap at N=15  (replaces the legacy N=16 matrix)
+    # S4: discovery correlation heatmap at N=15  (replaces the legacy N=16 matrix)
     d = pd.read_excel(os.path.join(BASE, "05_Source_Data/01_Institutional_RNAseq/"
                                          "InHouse_RNAseq_Normalized_Gene_Expression.xlsx"),
                       sheet_name="Normalized.expression").set_index("Reference_GeneName")
@@ -291,10 +371,10 @@ def suppS1_S2():
                     color="white" if abs(C.values[i, j]) > .6 else "#222")
     cb = fig.colorbar(im, fraction=.046, pad=.02); cb.set_label("Spearman ρ", fontsize=7)
     cb.ax.tick_params(labelsize=6)
-    ax.set_title("Supplementary Figure S2. Gene-gene correlation structure in the institutional\n"
+    ax.set_title("Supplementary Figure S4. Gene-gene correlation structure in the institutional\n"
                  "discovery cohort ($N$ = 15 pathologically adjudicated SCLC)",
                  fontsize=8, loc="left", weight="bold")
-    save(fig, "SuppFigureS2_v3_Discovery_Correlation_Matrix_N15")
+    save(fig, "SuppFigureS4_v3_Discovery_Correlation_Matrix_N15")
 
 
 def suppS3_S4():
@@ -334,13 +414,13 @@ def suppS3_S4():
         for e, y_, p_ in zip(est, yy, pv):
             ax.text(e, y_ + .22, f"$P$ = {p_:.3f}" if p_ >= .001 else "$P$ < 0.001",
                     ha="center", fontsize=5.4)
-    fig.suptitle("Supplementary Figure S3. DLL3 versus individual antigen-presentation genes in "
+    fig.suptitle("Supplementary Figure S1. DLL3 versus individual antigen-presentation genes in "
                  "both external cohorts\n(red = P < 0.05; HLA-C has zero variance in the Cologne "
                  "matrix and is not estimable there)",
                  fontsize=8, x=0.01, ha="left", weight="bold", y=1.06)
-    save(fig, "SuppFigureS3_v3_Individual_APM_Genes_Both_Cohorts")
+    save(fig, "SuppFigureS1_v3_Individual_APM_Genes_Both_Cohorts")
 
-    # S4: DLL3 vs PTPRC in both cohorts
+    # S2: DLL3 vs PTPRC in both cohorts
     fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.2))
     for ax, (name, dll3, ptprc, n) in zip(axes, [
             ("Jiang (GSE60052), $n$ = 79", g.loc["DLL3", tum].astype(float),
@@ -356,11 +436,11 @@ def suppS3_S4():
         ax.text(.04, .1, f"$r$ = {r:+.3f}\n$P$ = {p:.1e}", transform=ax.transAxes, fontsize=6.6)
         ax.set_title(name, fontsize=8, loc="left", weight="bold")
         ax.tick_params(labelsize=6.3)
-    fig.suptitle("Supplementary Figure S4. DLL3-high tumours contain less leukocyte transcript in "
+    fig.suptitle("Supplementary Figure S2. DLL3-high tumours contain less leukocyte transcript in "
                  "both external cohorts.\nThis is the composition signal that attenuates the "
                  "DLL3–APM association (post hoc).",
                  fontsize=8, x=0.01, ha="left", weight="bold", y=1.08)
-    save(fig, "SuppFigureS4_v3_DLL3_vs_PTPRC_Both_Cohorts")
+    save(fig, "SuppFigureS2_v3_DLL3_vs_PTPRC_Both_Cohorts")
 
 
 def suppS5_S6_S7():
@@ -480,7 +560,7 @@ def suppS5_S6_S7():
 
 
 def suppS8_S9_S10():
-    # S8: mIF all 51 with CIs  (REPLACES the five ROI-level Japanese-axis box plots)
+    # S10: mIF all 51 with CIs  (REPLACES the five ROI-level Japanese-axis box plots)
     mif = pd.read_csv(os.path.join(DER, "Derived_mIF_ROI_All_51Markers_Results.csv"))
     mif = mif.sort_values("r").reset_index(drop=True)
     n = 10
@@ -502,13 +582,13 @@ def suppS8_S9_S10():
                         f"$n$ = 10 patients; every interval crosses zero.",
             transform=ax.transAxes, fontsize=6.6, va="bottom", ha="right",
             bbox=dict(fc="#FBEDED", ec=RED, lw=.8, boxstyle="round,pad=0.4"))
-    ax.set_title("Supplementary Figure S8. Complete multiplex-immunofluorescence result: all 51 "
+    ax.set_title("Supplementary Figure S10. Complete multiplex-immunofluorescence result: all 51 "
                  "phenotypes.\nNo subset is selected; ordering is by effect size and confers no "
                  "significance.", fontsize=8, loc="left", weight="bold")
     ax.tick_params(labelsize=6.3)
-    save(fig, "SuppFigureS8_v3_mIF_All51_EffectSizes")
+    save(fig, "SuppFigureS10_v3_mIF_All51_EffectSizes")
 
-    # S9: TOST curves
+    # S8: TOST curves
     eq = axeq[axeq.analysis == "DLL3_to_Axis2_equivalence"].reset_index(drop=True)
     fig, ax = plt.subplots(figsize=(7.2, 3.6))
     deltas = np.linspace(0.05, 0.95, 400)
@@ -527,17 +607,18 @@ def suppS8_S9_S10():
     ax.set_ylim(0, .55); ax.set_xlim(0.05, 0.95)
     ax.legend(fontsize=6.2, frameon=False, loc="upper right")
     ax.text(.99, .55, "Equivalence is supported only to the RIGHT of each dotted line.\n"
-                      "No margin below |ρ| ≈ 0.43 is supported by these data.",
+                      f"No margin below |ρ| = {eq.smallest_equivalence_margin.min():.3f} is supported by these data.",
             transform=ax.transAxes, fontsize=6.4, ha="right", va="top", color="#333")
-    ax.set_title("Supplementary Figure S9. What the central null can and cannot exclude "
+    ax.set_title("Supplementary Figure S8. What the central null can and cannot exclude "
                  "(two one-sided tests).\nMargins were not pre-specified, so these bounds are "
                  "descriptive.", fontsize=8, loc="left", weight="bold")
     ax.tick_params(labelsize=6.3)
-    save(fig, "SuppFigureS9_v3_Equivalence_Bounds")
+    save(fig, "SuppFigureS8_v3_Equivalence_Bounds")
 
-    # S10: axis1 vs axis2 scatters
+    # S9: axis1 vs axis2 scatters
     a12 = axeq[axeq.analysis == "Axis1_vs_Axis2_direct"].reset_index(drop=True)
-    fig, axes = plt.subplots(1, 3, figsize=(7.2, 2.9))
+    fig, axes = plt.subplots(1, 3, figsize=(7.6, 2.9))
+    fig.subplots_adjust(wspace=0.5)
     for ax, (_, row) in zip(axes, a12.iterrows()):
         x, y = per["epithelial_APM_z"].values, per[row.y].values
         rx, ry = stats.rankdata(x), stats.rankdata(y)
@@ -545,8 +626,10 @@ def suppS8_S9_S10():
         m, b = np.polyfit(rx, ry, 1)
         ax.plot([1, len(rx)], [m + b, m * len(rx) + b], color=RED, lw=1.2)
         ax.set_xlabel("Epithelial APM score (rank)", fontsize=7)
-        ax.set_ylabel(row.y.replace("_pct_of_CD8", "\n(% of CD8, rank)").replace("_", " "),
-                      fontsize=6.6)
+        ax.set_ylabel({"TNFRSF9pos_pct_of_CD8": "$TNFRSF9^+$",
+                       "TNFRSF9+PD1+_pct_of_CD8": "$TNFRSF9^+$PD-1$^+$",
+                       "TNFRSF9+TIM3+_pct_of_CD8": "$TNFRSF9^+$TIM-3$^+$"}[row.y]
+                      + " cells,\n% of CD8$^+$ (rank)", fontsize=6.6)
         role = "PRINCIPAL endpoint" if row.y == "TNFRSF9pos_pct_of_CD8" else "supportive (nested)"
         ax.text(.04, .96, f"$r$ = {row.spearman_r:+.3f}, $P$ = {row.p:.4f}\n"
                           f"$q$ = {row.bh_q:.3f}\n"
@@ -555,18 +638,19 @@ def suppS8_S9_S10():
                           f"{role}",
                 transform=ax.transAxes, fontsize=5.6, va="top")
         ax.tick_params(labelsize=6.3)
-    fig.suptitle("Supplementary Figure S10. POST HOC direct test of the two immune features "
-                 "against each other (Chan atlas, 19 samples).\nThey are positively correlated, "
+    fig.suptitle("Supplementary Figure S9. POST HOC direct test of the two immune features "
+                 "against each other (Chan atlas, 19 donors).\nThey are positively correlated, "
                  "so they are not independent axes. Only the single-gated principal endpoint is "
                  "robust to\nminimum CD8 cell counts; the doubly-gated endpoints are supportive "
                  "only.",
                  fontsize=8, x=0.01, ha="left", weight="bold", y=1.16)
-    save(fig, "SuppFigureS10_v3_Axis1_vs_Axis2")
+    save(fig, "SuppFigureS9_v3_Axis1_vs_Axis2")
 
 
 if __name__ == "__main__":
     print("Generating Figure 3 and Supplementary Figures S1-S10 ->", FIG)
     figure3()
+    figure4()
     suppS1_S2()
     suppS3_S4()
     suppS5_S6_S7()

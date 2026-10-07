@@ -5,6 +5,7 @@ tables and figures had drifted out of sync with the analysis because nothing
 checked them. This script closes that loop: it re-reads the derived CSVs, extracts
 the corresponding claim from the manuscript text, and reports any mismatch.
 """
+import openpyxl
 import os
 import re
 import sys
@@ -57,7 +58,10 @@ print(f"  discovery N=17 CD274/APM~DLL3   r={d17.loc['CD274_APM_ratio~DLL3','est
 claim("discovery N=15 r", "*r* = +0.579")
 claim("discovery N=15 P", "*P* = 0.024")
 claim("discovery N=17 sensitivity", "*r* = +0.608, *P* = 0.0096")
-claim("discovery adjusted OLS", "β = +0.297, 95% CI −0.621 to +1.216, *P* = 0.48")
+claim("discovery adjusted OLS", "β = +0.297 (95% CI −0.621 to +1.216, *P* = 0.48)")
+claim("discovery N=15 Fisher CI",
+      f"95% CI {d15.loc['CD274_APM_ratio~DLL3','fisher_ci_low']:+.3f} to "
+      f"{d15.loc['CD274_APM_ratio~DLL3','fisher_ci_high']:+.3f}")
 claim("discovery N stated", "*N* = 15")
 forbid("old discovery N", "bulk RNA-sequencing (*N* = 17)")
 forbid("v2 no-exclusion claim", "all 17 constitute the primary analysis set")
@@ -99,23 +103,19 @@ for _, r in a12.iterrows():
 for _, r in eqv.iterrows():
     print(f"  central null   {r.y:<26} r={r.spearman_r:+.4f} P={r.p:.4f} "
           f"minDelta={r.smallest_equivalence_margin:.3f}")
-claim("central null PD1", "*r* = +0.072, 95% CI −0.395 to +0.510")
+claim("central null P", "*r* = +0.042 to +0.105, all *P* > 0.6")
 claim("central null range", "*r* = +0.042 to +0.105")
 claim("equivalence bound", "|ρ| ≈ 0.45")
 claim("equivalence range", "smallest supported margin 0.425 to 0.475")
 prin = a12[a12.y == "TNFRSF9pos_pct_of_CD8"].iloc[0]
 claim("axis1v2 principal r", f"*r* = {prin.spearman_r:+.3f}")
-claim("axis1v2 fisher CI", f"Fisher 95% CI {prin.ci_low:+.3f} to {prin.ci_high:+.3f}"
+claim("axis1v2 fisher CI", f"(95% CI {prin.ci_low:+.3f} to {prin.ci_high:+.3f}"
                           .replace("+", "+").replace("-", "−"))
-claim("axis1v2 bootstrap CI", f"bootstrap 95% CI {prin.bootstrap_ci_low:+.3f} to "
-                              f"{prin.bootstrap_ci_high:+.3f}")
+# the text reports Fisher z intervals only; bootstrap intervals live in the supplementary tables
+forbid("bootstrap CI quoted in the text", "bootstrap 95% CI")
 claim("axis1v2 q", f"*q* = {prin.bh_q:.4f}")
-claim("axis1v2 threshold20",
-      f"{int(prin.n_cd8_ge20)} donors, *r* = {prin.r_cd8_ge20:+.3f}, "
-      f"*P* = {prin.p_cd8_ge20:.4f}")
-claim("axis1v2 threshold50",
-      f"{int(prin.n_cd8_ge50)} donors, *r* = {prin.r_cd8_ge50:+.3f}, "
-      f"*P* = {prin.p_cd8_ge50:.3f}")
+claim("axis1v2 CD8 thresholds",
+      f"fewer than 20 or 50 CD8⁺ cells (*r* = {prin.r_cd8_ge20:+.3f} and {prin.r_cd8_ge50:+.3f})")
 claim("epithelial APM 5-gene primary", "*r* = +0.026, *P* = 0.91")
 claim("6-gene sensitivity reported", "six-gene sensitivity")
 claim("nested less stable", "less stable")
@@ -150,12 +150,12 @@ checks += 1
 if _pu.p < 0.05:
     fails.append("CCLE purity control failed: PTPRC still tracks APM, so the system is not "
                  "leukocyte-free")
-claim("CCLE test reported", "A leukocyte-free system resolves the direction")
+claim("CCLE test reported", "DLL3 was also tested against the same five-gene APM module in a leukocyte-free system")
 claim("CCLE primary value", f"*r* = {_pt.spearman_r:+.3f}".replace("-", "−"))
 claim("CCLE positive control", f"DLL3–*ASCL1* *r* = {_pc.spearman_r:+.3f}")
-claim("CCLE limitation stated", "one of three convergent estimands rather than proof")
+claim("CCLE limitation stated", "so the cell-line null alone would not establish this reading")
 claim("confounder range reported",
-      f"range {prin_c.partial_spearman_r.min():+.3f} to "
+      f"all nine adjustment models (*r* = {prin_c.partial_spearman_r.min():+.3f} to "
       f"{prin_c.partial_spearman_r.max():+.3f}")
 drv = pd.read_csv(os.path.join(SRC, "SuppTable_Axis_CandidateDrivers_v3.csv"))
 checks += 1
@@ -199,12 +199,9 @@ print(f"  unit sensitivity: per biospecimen n={int(_spec.n)} r={_spec.spearman_r
 claim("atlas structure stated", "It holds 23 biospecimens from 19 donors")
 claim("pooling justified", "the unit that avoids pseudoreplication")
 claim("no cross-specimen comparison", "nothing is compared across specimens")
-claim("unit sensitivity biospecimen",
-      f"*r* = {_spec.spearman_r:+.3f} (*P* = {_spec.p:.4f}) across the {int(_spec.n)} biospecimens")
-claim("unit sensitivity singles",
-      f"{_sing.spearman_r:+.3f} (*P* = {_sing.p:.3f}) in the {int(_sing.n)} donors with a single biospecimen")
-claim("unit sensitivity one each",
-      f"{_one.spearman_r:+.3f} (*P* = {_one.p:.4f}) with one biospecimen per donor")
+_units = [_spec.spearman_r, _sing.spearman_r, _one.spearman_r]
+claim("unit sensitivity range",
+      f"each alternative unit of analysis (*r* = {min(_units):+.3f} to {max(_units):+.3f})")
 # the atlas unit must not be called a sample anywhere in the submitted text
 for _txt, _where in [(MS, "manuscript"), (LEG, "figure legends"), (CL, "cover letter")]:
     for _bad in ["19 samples", "evaluable samples", "same-sample", "across samples",
@@ -214,12 +211,17 @@ for _txt, _where in [(MS, "manuscript"), (LEG, "figure legends"), (CL, "cover le
             fails.append(f"UNIT {_where} still calls the Chan atlas unit a sample: «{_bad}»")
 
 # ---- five-gene primary versus six-gene sensitivity must not be mixed in the main tables ---
-# Table 2 quoted the six-gene values while Table 1 and the text quote the five-gene primary.
+# The study-design table (main Table 1) once quoted the six-gene values while the statistics
+# table (now Supplementary Table S11) and the text quote the five-gene primary.
 import docx as _docx
-_t1 = _docx.Document(os.path.join(V3, "tables", "Table1_v3_Key_Results_CrossPlatform_Statistics.docx"))
-_t2 = _docx.Document(os.path.join(V3, "tables", "Table2_v3_Questions_and_Dataset_Roles.docx"))
+_t2 = _docx.Document(os.path.join(V3, "tables", "Table1_v3_Questions_and_Dataset_Roles.docx"))
 _cells = lambda d: " | ".join(c.text for t in d.tables for row in t.rows for c in row.cells)
-_c1, _c2 = _cells(_t1), _cells(_t2)
+_wb11 = openpyxl.load_workbook(os.path.join(V3, "supplementary",
+                                            "SuppTable_S11_Key_Statistics_All_Platforms_v3.xlsx"),
+                               read_only=True)
+_c1 = " | ".join(str(v) for ws in _wb11.worksheets for row in ws.iter_rows(values_only=True)
+                 for v in row if v is not None)
+_c2 = _cells(_t2)
 _AX = pd.read_csv(os.path.join(SRC, "SuppTable_Axis1_vs_Axis2_and_Equivalence_v3.csv"))
 _ctx5 = _AX[(_AX.analysis == "DLL3_to_epithelial_APM_context")
             & (_AX.y == "epithelial_APM_z_5gene_primary")].iloc[0]
@@ -227,7 +229,7 @@ _ctx6 = _AX[(_AX.analysis == "DLL3_to_epithelial_APM_context")
             & (_AX.y == "epithelial_APM_z_6gene_sensitivity")].iloc[0]
 _d5 = _AX[_AX.analysis == "Axis1_vs_Axis2_direct"]
 _d6 = _AX[_AX.analysis == "Axis1_vs_Axis2_6gene_sensitivity"]
-for _lbl, _txt in [("Table 1", _c1), ("Table 2", _c2)]:
+for _lbl, _txt in [("Supplementary Table S11", _c1), ("Table 1", _c2)]:
     checks += 2
     if f"r = {_ctx5.spearman_r:+.3f}" not in _txt:
         fails.append(f"TABLES {_lbl} does not carry the five-gene epithelial APM context value")
@@ -235,11 +237,11 @@ for _lbl, _txt in [("Table 1", _c1), ("Table 2", _c2)]:
         fails.append(f"TABLES {_lbl} quotes the six-gene sensitivity value as if it were primary")
 checks += 2
 if f"{_d5.spearman_r.min():+.3f} to {_d5.spearman_r.max():+.3f}" not in _c2:
-    fails.append("TABLES Table 2 does not carry the five-gene feature-versus-feature range")
+    fails.append("TABLES Table 1 does not carry the five-gene feature-versus-feature range")
 if f"{_d6.spearman_r.min():+.3f} to {_d6.spearman_r.max():+.3f}" in _c2:
-    fails.append("TABLES Table 2 quotes the six-gene feature-versus-feature range")
-# the S10 legend annotates a five-gene figure
-claim("S10 legend uses the five-gene value",
+    fails.append("TABLES Table 1 quotes the six-gene feature-versus-feature range")
+# the S9 legend annotates a five-gene figure
+claim("S9 legend uses the five-gene value",
       f"unrelated to the same five-gene epithelial APM score (*r* = {_ctx5.spearman_r:+.3f}, "
       f"*P* = {_ctx5.p:.2f})", LEG)
 claim("Texh counts", "only 578 Texh cells")
@@ -249,8 +251,10 @@ mif = pd.read_csv(os.path.join(BASE, "05_Source_Data/06_Derived_Analysis_Tables/
                                      "Derived_mIF_ROI_All_51Markers_Results.csv"))
 print(f"  mIF phenotypes={len(mif)} FDR-significant={int((mif.q<0.05).sum())} "
       f"min q={mif.q.min():.3f} max q={mif.q.max():.3f}")
-claim("mIF 0 of 51", "0 of 51 reached significance")
-claim("mIF q range", "minimum *q* = 0.895; range 0.895 to 0.987")
+checks += 1
+if int((mif.q < 0.05).sum()) != 0:
+    fails.append("MIF the text reports no significant phenotype but the derived table has one")
+claim("mIF null and minimum q", f"across all {len(mif)} phenotypes (minimum *q* = {mif.q.min():.3f}")
 forbid("mIF all q=0.895", "all *q* = 0.895")
 forbid("mIF top-3 narrative", "directionally concordant trends without statistical support")
 forbid("mIF Fig 3F misref", "3.5-fold higher")
@@ -261,7 +265,8 @@ print("2. WITHDRAWN v2 CLAIMS AND STALE ARTEFACTS")
 print("=" * 82)
 forbid("ridge model", "ridge model adjusting for")
 forbid("ridge beta", "β = +0.382")
-claim("ridge withdrawn", "The exploratory ridge model of an earlier version is withdrawn")
+forbid("reference to an unreviewed earlier version", "earlier version")
+forbid("reference to the v2 figure set", "v2 ")
 forbid("reinvigoratable", "reinvigoratable T-cell compartment retained")
 # The words may appear only inside an explicit disclaimer, never as a description.
 claim("checkpoint-responsive disclaimed",
@@ -320,8 +325,7 @@ forbid("Rudin2019 cold/inflamed misattribution",
        "tend to be immunologically \"cold,\" whereas NE-low subtypes are comparatively inflamed")
 forbid("TOST bound self-contradiction", "This bound includes the *r* = +0.505")
 claim("institutional PTPRC discrepancy disclosed", "*r* = +0.061, *P* = 0.83, *N* = 15")
-claim("central-null multiplicity explained", "No multiplicity correction is applied to these three tests")
-claim("Figure 1 cited", "(Fig. 1; Table 2)")
+claim("Figure 1 cited", "shown in Figure 1 and Table 1")
 
 print()
 print("=" * 82)
@@ -333,9 +337,11 @@ print("=" * 82)
 # code and cross-checks it against the text and the legends, so the failure mode
 # cannot recur silently.
 FIGSRC = {
-    2: (os.path.join(V3, "s06_generate_main_figures_v3.py"), "def figure2", "def figure4"),
+    2: (os.path.join(V3, "s06_generate_main_figures_v3.py"), "def figure2", "def figure5"),
     3: (os.path.join(V3, "s07_generate_figure3_and_supplementary_figures_v3.py"),
-        "def figure3", "def suppS1_S2"),
+        "def figure3", "def figure4"),
+    4: (os.path.join(V3, "s07_generate_figure3_and_supplementary_figures_v3.py"),
+        "def figure4", "def suppS1_S2"),
 }
 _bodytext = MS.split("# Results", 1)[1].split("# Data Availability", 1)[0]
 for fignum, (path, start, end) in FIGSRC.items():
@@ -378,8 +384,6 @@ print()
 print("=" * 82)
 print("2b. NO-CLINICAL-ANNOTATION POLICY (author decision, 2026-08-07)")
 print("=" * 82)
-claim("no-clinical stated in Methods",
-      "no clinical annotation is reported or used")
 claim("no-clinical stated in Limitations",
       "No clinical annotation is reported for the institutional cohort, by design")
 claim("unadjusted acknowledged", "Residual confounding by unmeasured patient characteristics", MS)
@@ -597,14 +601,42 @@ for n in range(1, 14):
     if not any(f"_S{n}_" in f for f in os.listdir(suppdir)):
         fails.append(f"FORMAT Supplementary Table S{n} not generated")
     checks += 1
-    # word-boundary match: plain "Supplementary Table S1" must not be satisfied by
-    # "Supplementary Table S10". Also accept "Supplementary Tables S7 and S11" and
-    # sub-panel references such as "Supplementary Table S10b".
+    # word-boundary match: plain "Supplementary Table S2" must not be satisfied by
+    # "Supplementary Table S3". Also accept "Supplementary Tables S1 and S9" and
+    # sub-panel references such as "Supplementary Table S3a".
     if not re.search(rf"Supplementary Tables? (?:S\d+[ab]?(?:,| and|;) )*S{n}(?![0-9])", MS):
         fails.append(f"FORMAT Supplementary Table S{n} is never cited in the main text")
 
-for t in ["Table1_v3_Key_Results_CrossPlatform_Statistics.docx",
-          "Table2_v3_Questions_and_Dataset_Roles.docx"]:
+_body_cit = MS.split("# Introduction", 1)[1].split("# References", 1)[0]
+for _kind in ("Table", "Figure"):
+    _seen = []
+    for _m in re.finditer(rf"Supplementary {_kind}s? ((?:S\d+[a-e]?(?:, | and |–)?)+)", _body_cit):
+        for _s in re.findall(r"S(\d+)", _m.group(1)):
+            if int(_s) not in _seen:
+                _seen.append(int(_s))
+    checks += 1
+    if _seen != sorted(_seen):
+        fails.append(f"FORMAT Supplementary {_kind}s are not numbered in order of first citation: {_seen}")
+# panels of each main figure, and lettered sub-tables, must also be cited in letter order
+for _f in range(1, 6):
+    _seq = []
+    for _m in re.finditer(rf"Fig\. {_f}([A-H](?:(?:[–-]|, )[A-H])*)", _body_cit):
+        for _a, _b in re.findall(r"([A-H])(?:[–-]([A-H]))?", _m.group(1)):
+            for _c in range(ord(_a), ord(_b or _a) + 1):
+                if chr(_c) not in _seq:
+                    _seq.append(chr(_c))
+    checks += 1
+    if _seq != sorted(_seq):
+        fails.append(f"FORMAT Figure {_f} panels are not cited in letter order: {_seq}")
+for _n in range(1, 14):
+    _seq = []
+    for _m in re.finditer(rf"S{_n}([a-e])(?![a-z0-9])", _body_cit):
+        if _m.group(1) not in _seq:
+            _seq.append(_m.group(1))
+    checks += 1
+    if _seq != sorted(_seq):
+        fails.append(f"FORMAT Supplementary Table S{_n} sub-tables are not cited in letter order: {_seq}")
+for t in ["Table1_v3_Questions_and_Dataset_Roles.docx"]:
     checks += 1
     if not os.path.exists(os.path.join(V3, "tables", t)):
         fails.append(f"FORMAT main table missing in Word format: {t}")

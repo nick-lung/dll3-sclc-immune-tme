@@ -3,7 +3,7 @@
 The v2 supplementary set is superseded in full. It contained statements
 incompatible with the v2 main text (S4), a stale primary-analysis N (S5), and a
 cohort definition that the 2026-08-06 pathology adjudication has now corrected.
-Tables are numbered S1-S12; each carries a title row and explicit footnotes.
+Tables are numbered S1-S13 (S11 is written by s08); each carries a title row and explicit footnotes.
 """
 import os
 import numpy as np
@@ -22,7 +22,7 @@ def write(name, sheets):
     """sheets: {sheet_name: (title, dataframe, [footnotes])}"""
     path = os.path.join(OUT, name)
     with pd.ExcelWriter(path, engine="openpyxl") as w:
-        for sheet, (title, df, notes) in sheets.items():
+        for sheet, (title, df, notes) in sorted(sheets.items()):   # sub-tables in letter order
             pd.DataFrame([[title]]).to_excel(w, sheet_name=sheet, index=False,
                                              header=False, startrow=0)
             df.to_excel(w, sheet_name=sheet, index=False, startrow=2)
@@ -35,7 +35,7 @@ meta = pd.read_csv(os.path.join(
     BASE, "05_Source_Data/01_Institutional_RNAseq/CellCarta_Reference/"
           "SCLC_Prospective_17samples_Metadata_20260622.csv"))
 
-# ------------------------------------------------------------------ S1
+# ------------------------------------------------------------------ S2
 hs = pd.read_excel(os.path.join(
     BASE, "13_Review_Packet_20260806/04_補足資料/"
           "SuppTable1_Institutional_Patient_Characteristics.xlsx"))
@@ -65,8 +65,8 @@ s1["mIF ROIs analysed"] = s1["Sample ID"].map(lambda x: hmap[x][2] if x in hmap 
 s1["In mIF analysis set"] = np.where(s1["mIF ROIs analysed"].notna(), "Yes", "No")
 s1 = s1.sort_values("Sample ID").reset_index(drop=True)
 
-write("SuppTable_S1_Specimen_and_Assay_Metadata_v3.xlsx", {"S1": (
-    "Supplementary Table S1. Specimen and assay metadata for the institutional cohort "
+write("SuppTable_S2_Specimen_and_Assay_Metadata_v3.xlsx", {"S2": (
+    "Supplementary Table S2. Specimen and assay metadata for the institutional cohort "
     "(17 specimens sequenced; 15 in the RNA-seq primary analysis set after pathology "
     "adjudication; 10 of these also in the mIF analysis set).",
     s1,
@@ -86,7 +86,7 @@ write("SuppTable_S1_Specimen_and_Assay_Metadata_v3.xlsx", {"S1": (
      "patients had been labelled SCLC-I by an automated classifier, including specimens with "
      "ASCL1 above 7,000, which indicates classifier failure rather than a biological finding."])})
 
-# ------------------------------------------------------------------ S2
+# ------------------------------------------------------------------ S8
 s2 = pd.DataFrame([
     ("APM (antigen-presentation machinery)", "HLA-A, HLA-B, B2M, TAP1, TAP2",
      "PRIMARY. Harmonized 5-gene definition, used identically in both external cohorts and in "
@@ -97,27 +97,26 @@ s2 = pd.DataFrame([
      "the cohorts non-comparable."),
     ("Effector", "GZMB, PRF1, NKG7, IFNG", "Secondary"),
     ("Exhaustion", "PDCD1, LAG3, TIGIT, HAVCR2, CTLA4, TOX", "Secondary"),
-    ("M2 macrophage", "MRC1, MARCO, MSR1, CD163", "Secondary"),
     ("NE lineage (adjustment set)", "ASCL1, NEUROD1, POU2F3, YAP1", "Covariate set"),
     ("Leukocyte content (adjustment)", "PTPRC", "Post hoc covariate"),
     ("CD274/APM ratio", "log2(CD274) - mean(log2(APM genes))",
      "Exploratory, discovery cohort only"),
 ], columns=["Module", "Genes", "Role"])
-write("SuppTable_S2_Gene_Module_Definitions_v3.xlsx", {"S2": (
-    "Supplementary Table S2. Gene module definitions.", s2,
+write("SuppTable_S8_Gene_Module_Definitions_v3.xlsx", {"S8": (
+    "Supplementary Table S8. Gene module definitions.", s2,
     ["Module score = mean of gene-wise z-scored log2 expression, z-scored within the analysis "
      "population.",
      "CHANGED FROM v2: the APM module is now the harmonized 5-gene definition in all cohorts."])})
 
-# ------------------------------------------------------------------ S3
+# ------------------------------------------------------------------ S12
 mif = pd.read_csv(os.path.join(DER, "Derived_mIF_ROI_All_51Markers_Results.csv"))
 mif = mif.sort_values("p").reset_index(drop=True)
 mif.insert(0, "Rank by P", np.arange(1, len(mif) + 1))
 mif.columns = ["Rank by P", "Phenotype", "Spearman r", "P", "Mean density, DLL3-high",
                "Mean density, DLL3-low", "Fold change", "q (Benjamini-Hochberg)",
                "FDR significant"]
-write("SuppTable_S3_mIF_All51_Full_Results_v3.xlsx", {"S3": (
-    "Supplementary Table S3. Complete multiplex-immunofluorescence results: all 51 derived "
+write("SuppTable_S12_mIF_All51_Full_Results_v3.xlsx", {"S12": (
+    "Supplementary Table S12. Complete multiplex-immunofluorescence results: all 51 derived "
     "phenotypes, patient-level area-weighted mean densities, 10 patients.", mif,
     [f"0 of {len(mif)} phenotypes reached FDR significance. Minimum q = "
      f"{mif['q (Benjamini-Hochberg)'].min():.3f}; maximum q = "
@@ -128,55 +127,6 @@ write("SuppTable_S3_mIF_All51_Full_Results_v3.xlsx", {"S3": (
      "DLL3 H-score is modelled continuously in the Spearman analysis. The DLL3-high and DLL3-low "
      "density columns are descriptive summaries at the median split and are not the basis of any "
      "test."])})
-
-# ------------------------------------------------------------------ S4 (rewritten in full)
-s4 = pd.DataFrame([
-    ("Bulk tissue association (2 external cohorts, N = 160)",
-     "DLL3 is inversely correlated with a bulk APM module score",
-     "That tumour cells themselves down-regulate antigen presentation",
-     "Markedly attenuated by PTPRC adjustment; not separable from NE subtype in 1 of 2 cohorts; "
-     "bulk signal mixes tumour, immune and stromal compartments"),
-    ("Single-cell epithelial association (Chan, 19 samples)",
-     "Tumour-cell DLL3 is not correlated with the primary five-gene epithelial APM score "
-     "(r = +0.026, P = 0.91)",
-     "That no tumour-intrinsic relationship exists",
-     "Drop-out limits single-cell APM quantification; 19 samples"),
-    ("Single-cell composition association (Chan, 19 samples)",
-     "DLL3 correlates with the exhausted CD8 fraction (r = +0.505, P = 0.028)",
-     "A robust or metric-independent relationship",
-     "Does not survive an alternative DLL3 metric (r = +0.346, P = 0.15); 7 of 19 samples "
-     "contribute <= 3 Texh cells; one sample is a severe outlier"),
-    ("Within-patient paired single-cell (Chan, 15 evaluable)",
-     "TNFRSF9+ CD8 cells have higher PD-1 and TIM-3 than TNFRSF9- CD8 cells from the same donor; "
-     "robust to sequencing-depth adjustment",
-     "That these cells respond to checkpoint blockade, or that they co-express an effector programme",
-     "GZMB not significant in any depth-adjusted analysis; binary-detection effect sizes are "
-     "inflated relative to continuous expression; PD-1/TIM-3 transcript positivity cannot "
-     "distinguish activation from terminal exhaustion"),
-    ("Central link test (Chan, 19 samples)",
-     "No association detected between DLL3 and the abundance of the TNFRSF9-defined phenotype",
-     "That the two are independent",
-     "Equivalence supported only within |rho| ~ 0.45; 80% power only for |rho| >= 0.6"),
-    ("Axis-versus-axis test (Chan, 19 samples, POST HOC)",
-     "Epithelial APM and TNFRSF9-defined CD8 abundance are positively correlated "
-     "(five-gene primary r = +0.47 to +0.61, q = 0.016 to 0.042)",
-     "A direction of effect, or any relationship to DLL3",
-     "Post hoc; n = 19; epithelial APM is a different estimand from the bulk APM that carries the "
-     "external replication"),
-    ("ROI-level mIF phenotype (10 patients)",
-     "Nothing. 0 of 51 phenotypes reach FDR significance",
-     "Any phenotype-level association, in either direction",
-     "10 patients; ROI counts per patient range 1-38; no spatial coordinates"),
-    ("Not assessable with these data", "-",
-     "Spatial adjacency, causal mechanism, therapeutic efficacy, on-treatment dynamics",
-     "Per-cell coordinates unavailable; no interventional or outcome data"),
-], columns=["Level of evidence", "What it shows", "What it does NOT show", "Key limitation"])
-write("SuppTable_S4_Limitations_and_Inference_Level_v3.xlsx", {"S4": (
-    "Supplementary Table S4. Level of inference supported by each analysis.", s4,
-    ["REVISED IN FULL. The v2 version stated that 'tumors with higher DLL3 harbor more exhausted "
-     "CD8' and that 'TNFRSF9+ CD8 cells co-express effector + exhaustion'. Both statements were "
-     "incompatible with the v2 main text, which had demoted the first to a fragile, "
-     "metric-dependent observation and had explicitly withdrawn the second. They are removed."])})
 
 # ------------------------------------------------------------------ S5
 qc = meta.rename(columns={
@@ -205,7 +155,7 @@ write("SuppTable_S5_RNAseq_QC_Metrics_v3.xlsx", {"S5": (
      "Pipeline: CellCarta in-house RNA-seq pipeline; reference GENCODE GRCh38.",
      "Source: CellCarta P1947 study; metadata delivered 2026-06-22."])})
 
-# ------------------------------------------------------------------ S6
+# ------------------------------------------------------------------ S7
 counts = pd.read_csv(os.path.join(SRC, "SuppTable_Chan_PerDonor_CellCounts_v3.csv"))
 eff = pd.DataFrame([
     ("Primary (>=3 cells/subgroup)", "PD-1", 15, "14/15", 18.5, 0.967, 1.8e-04),
@@ -216,26 +166,41 @@ eff = pd.DataFrame([
     ("Sensitivity (>=1 cell/subgroup)", "GZMB", 18, "11/18", 8.3, 0.294, 3.1e-01),
 ], columns=["Analysis", "Marker", "N evaluable", "Higher in TNFRSF9+", "Median delta (pp)",
             "Rank-biserial r", "Wilcoxon P"])
-write("SuppTable_S6_Chan_PerDonor_Counts_and_EffectSizes_v3.xlsx", {
-    "S6a_cell_counts": (
-        "Supplementary Table S6a. Per-donor cell counts for every quantity entering the Chan "
+write("SuppTable_S7_Chan_PerDonor_Counts_and_EffectSizes_v3.xlsx", {
+    "S7a_cell_counts": (
+        "Supplementary Table S7a. Per-donor cell counts for every quantity entering the Chan "
         "atlas analyses.", counts,
         ["Evaluability under the primary rule: >= 10 CD8+ cells per donor AND >= 3 cells in each "
-         "TNFRSF9 subgroup. 15 of 19 samples qualify.",
+         "TNFRSF9 subgroup. 15 of 19 donors qualify.",
          "The atlas contains 578 CD8+ Texh cells in total; donor RU1195 contributes 430 of them "
          "(74%). This is why only 8 donors are evaluable for the Texh-stratified analysis.",
          "The PleuralEffusion specimen has no TNFRSF9+ CD8 cells and is not evaluable under any "
          "rule."]),
-    "S6b_effect_sizes": (
-        "Supplementary Table S6b. Within-donor paired comparison of marker positivity in TNFRSF9+ "
+    "S7c_biospecimens": (
+        "Supplementary Table S7c. Biospecimen structure of the Chan atlas and the three donors "
+        "who contributed more than one biospecimen.",
+        pd.read_csv(os.path.join(SRC, "SuppTable_Chan_MultiBiospecimen_Donors_v3.csv")),
+        ["The atlas holds 23 biospecimens from 19 donors (HTAN_Biospecimen_ID and donor_id in the "
+         "CELLxGENE object). Sixteen donors contributed one biospecimen each.",
+         "RU1108 contributed three lung resection pieces; RU1144 and RU1181 each contributed a "
+         "lung and a lymph-node specimen. This table lists those seven biospecimens.",
+         "Cells were pooled to the donor for every analysis. Donor-level pseudo-bulk is the unit "
+         "that avoids pseudoreplication, and four of these seven biospecimens hold fewer than 20 "
+         "CD8+ cells, so a per-biospecimen analysis would lose most of them to the evaluability "
+         "rule.",
+         "Every biospecimen contributes both epithelial and immune cells, so no quantity is "
+         "compared across specimens. Supplementary Table S3d repeats the principal post hoc test "
+         "under three alternative units of analysis."]),
+    "S7b_effect_sizes": (
+        "Supplementary Table S7b. Within-donor paired comparison of marker positivity in TNFRSF9+ "
         "versus TNFRSF9- CD8+ T cells.", eff,
         ["Positivity = detected transcript (normalized expression > 0). CD8+ pool = CD8+ Texh, "
          "Teff and Tmem (author_cell_type, Chan atlas immune object).",
          "Effect size = matched-pairs rank-biserial correlation.",
-         "GZMB is threshold-dependent and is reported as exploratory. See Supplementary Table S11 "
+         "GZMB is threshold-dependent and is reported as exploratory. See Supplementary Table S9 "
          "for depth-adjusted analyses in which GZMB is not significant."])})
 
-# ------------------------------------------------------------------ S7
+# ------------------------------------------------------------------ S1
 s7 = pd.DataFrame([
     ("Institutional cohort composition", "15 pathologically adjudicated SCLC",
      "All 17 sequenced specimens (diagnosis-inclusive)",
@@ -255,8 +220,8 @@ s7 = pd.DataFrame([
      "Mean of raw log2 expression", "Jiang r = -0.299", "Jiang r = -0.301",
      "Under the harmonized 5-gene definition this choice is immaterial."),
     ("Chan paired-test evaluability",
-     ">= 10 CD8 cells/donor AND >= 3 per TNFRSF9 subgroup (15 samples)",
-     ">= 1 cell per subgroup (18 samples)", "PD-1 median delta +18.5 pp (P = 1.8e-04)",
+     ">= 10 CD8 cells/donor AND >= 3 per TNFRSF9 subgroup (15 donors)",
+     ">= 1 cell per subgroup (18 donors)", "PD-1 median delta +18.5 pp (P = 1.8e-04)",
      "PD-1 median delta +22.2 pp (P = 4.6e-05)", "Unchanged from v2."),
     ("Chan GZMB (effector arm)", "Reported as EXPLORATORY", "-", "P = 0.048 (>= 3 cells)",
      "P = 0.31 (>= 1 cell); depth-adjusted OR 1.24, P = 0.19",
@@ -288,13 +253,13 @@ s7 = pd.DataFrame([
      "No individual phenotype is singled out, because all 51 are non-significant."),
 ], columns=["Analytic choice", "PRIMARY", "Sensitivity", "Value under primary",
             "Value under sensitivity", "Rationale / what changed from v2"])
-write("SuppTable_S7_Analysis_Specification_v3.xlsx", {"S7": (
-    "Supplementary Table S7. Analysis specification: primary and sensitivity analyses, and every "
+write("SuppTable_S1_Analysis_Specification_v3.xlsx", {"S1": (
+    "Supplementary Table S1. Analysis specification: primary and sensitivity analyses, and every "
     "change from v2.", s7,
     ["Analyses marked POST HOC were performed after the primary results were assembled and are "
      "labelled as post hoc wherever they appear in the manuscript."])})
 
-# ------------------------------------------------------------------ S8
+# ------------------------------------------------------------------ S4
 s8 = pd.DataFrame([
     ("Bulk RNA-seq", "Tumours sequenced (CellCarta P1947)", 17, "-",
      "All 17 passed the pre-specified DV200 >= 40 threshold."),
@@ -306,7 +271,7 @@ s8 = pd.DataFrame([
      "Pathologically confirmed SCLC. Continuous-DLL3 analyses use all 15."),
     ("Bulk RNA-seq", "Sensitivity population", 17, "-",
      "The diagnosis-inclusive 17-specimen set is retained as a sensitivity analysis throughout "
-     "(Supplementary Table S7)."),
+     "(Supplementary Table S1)."),
     ("Bulk RNA-seq", "Subset with DLL3 IHC H-score", 10, "-",
      "H-scores 0, 6, 10, 10, 50, 100, 180, 270, 270, 300. These 10 are the mIF analysis cohort."),
     ("mIF", "Archival batch (slides 2023-04)", 15, 372,
@@ -334,28 +299,30 @@ s8 = pd.DataFrame([
     ("George/Cologne (external)", "ANALYSED (primary)", 81, "-",
      "cBioPortal study sclc_ucologne_2015, molecular profile sclc_ucologne_2015_rna_seq_mrna. "
      "No samples shared with the Jiang cohort."),
-    ("Chan (external)", "Distinct donor identifiers", 19, "-",
-     "18 named donors plus one specimen labelled only 'PleuralEffusion'; described as 19 samples, "
-     "not 19 patients."),
+    ("Chan (external)", "Biospecimens deposited", 23, "-",
+     "23 HTAN_Biospecimen_IDs. Three donors contributed more than one (Supplementary Table S7c)."),
+    ("Chan (external)", "Distinct donors, the unit of analysis", 19, "-",
+     "18 named donors plus one donor labelled only 'PleuralEffusion'. Cells were pooled to the "
+     "donor; the manuscript reports donors, not biospecimens."),
     ("Chan (external)", "Evaluable for the primary paired test", 15, "-",
      ">= 10 CD8 cells and >= 3 cells in each TNFRSF9 subgroup."),
     ("Chan (external)", "Evaluable for the sensitivity paired test", 18, "-",
-     ">= 1 cell in each subgroup; one sample has no TNFRSF9+ CD8 cells."),
+     ">= 1 cell in each subgroup; one donor has no TNFRSF9+ CD8 cells."),
 ], columns=["Cohort", "Step", "Patients / samples", "ROIs", "Reason / detail"])
-write("SuppTable_S8_Cohort_Flow_v3.xlsx", {"S8": (
-    "Supplementary Table S8. Cohort flow.", s8,
+write("SuppTable_S4_Cohort_Flow_v3.xlsx", {"S4": (
+    "Supplementary Table S4. Cohort flow.", s8,
     ["CHANGED FROM v2: v2 recorded 'Excluded: 0 - none. All 17 are histologically confirmed "
      "SCLC'. Pathology adjudication on 2026-08-06 established that two specimens are LC-NEC. The "
      "primary RNA-seq analysis set is therefore 15, not 17.",
      "This also resolves an internal inconsistency in v2, in which LC-NEC was grounds for "
      "exclusion in the mIF cohort but not in the RNA-seq cohort."])})
 
-# ------------------------------------------------------------------ S9
+# ------------------------------------------------------------------ S6
 s9 = pd.read_csv(os.path.join(SRC, "SuppTable_External_Replication_and_Leukocyte_Sensitivity_v3.csv"))
 meta9 = pd.read_csv(os.path.join(SRC, "Meta_TwoExternalCohorts_v3.csv"))
-write("SuppTable_S9_External_Replication_and_Leukocyte_v3.xlsx", {
-    "S9a_models": (
-        "Supplementary Table S9a. External replication in two independent bulk cohorts, and "
+write("SuppTable_S6_External_Replication_and_Leukocyte_v3.xlsx", {
+    "S6a_models": (
+        "Supplementary Table S6a. External replication in two independent bulk cohorts, and "
         "leukocyte-content sensitivity analysis.", s9,
         ["The APM module uses the same five genes (HLA-A, HLA-B, B2M, TAP1, TAP2) in both "
          "cohorts. HLA-C has zero variance across all 81 George/Cologne samples.",
@@ -364,18 +331,18 @@ write("SuppTable_S9_External_Replication_and_Leukocyte_v3.xlsx", {
          "PTPRC models are POST HOC. PTPRC adjustment markedly attenuates the DLL3 coefficient. "
          "PTPRC may be a confounder, a mediator, or a proxy for tissue composition, and this "
          "design cannot distinguish among them."]),
-    "S9b_meta": (
-        "Supplementary Table S9b. Fixed-effect meta-analysis of the two external cohorts.", meta9,
+    "S6b_meta": (
+        "Supplementary Table S6b. Fixed-effect meta-analysis of the two external cohorts.", meta9,
         ["With k = 2 cohorts, Cochran's Q has minimal power. Heterogeneity is reported as not "
          "detectable, never as absent."])})
 
-# ------------------------------------------------------------------ S10
+# ------------------------------------------------------------------ S3
 s10 = pd.read_csv(os.path.join(SRC, "SuppTable_Axis1_vs_Axis2_and_Equivalence_v3.csv"))
 adj = pd.read_csv(os.path.join(SRC, "SuppTable_RNAseq_Diagnosis_Adjudication_v3.csv"))
-write("SuppTable_S10_Equivalence_and_AxisVsAxis_v3.xlsx", {
-    "S10a_axis_and_equivalence": (
-        "Supplementary Table S10a. Equivalence bounds on the central null, and the post hoc "
-        "direct test of the two immune features against each other (Chan atlas, 19 samples).",
+write("SuppTable_S3_Equivalence_and_AxisVsAxis_v3.xlsx", {
+    "S3b_axis_and_equivalence": (
+        "Supplementary Table S3b. Equivalence bounds on the central null, and the post hoc "
+        "direct test of the two immune features against each other (Chan atlas, 19 donors).",
         s10,
         ["'smallest_equivalence_margin' is the smallest margin delta for which two one-sided "
          "tests both reject at alpha = 0.05, that is, the tightest bound the data support.",
@@ -390,13 +357,27 @@ write("SuppTable_S10_Equivalence_and_AxisVsAxis_v3.xlsx", {
          "post hoc direct-test family. TNFRSF9+ as %CD8 is the principal exploratory endpoint; "
          "the nested PD-1+ and TIM-3+ fractions are supportive endpoints.",
          "The table reports Fisher z and percentile-bootstrap intervals, leave-one-out ranges, "
-         "and sensitivity analyses restricted to samples with at least 20 or 50 CD8 cells.",
+         "and sensitivity analyses restricted to donors with at least 20 or 50 CD8 cells.",
          "Epithelial APM is a different estimand from the bulk APM score that carries the "
          "external replication. Within the Chan atlas DLL3 itself is unrelated to the primary "
          "five-gene epithelial APM score (r = +0.026, P = 0.91)."]),
-    "S10c_confounder_sensitivity": (
-        "Supplementary Table S10c. Shared-technical-driver sensitivity for the post hoc "
-        "epithelial APM versus TNFRSF9-defined CD8 abundance association (Chan atlas, 19 samples).",
+    "S3d_unit_of_analysis": (
+        "Supplementary Table S3d. The principal post hoc test and the central null under three "
+        "alternative units of analysis.",
+        pd.read_csv(os.path.join(SRC, "SuppTable_Chan_UnitOfAnalysis_Sensitivity_v3.csv")),
+        ["The published unit is the donor (19). The atlas holds 23 biospecimens, because three "
+         "donors contributed more than one (Supplementary Table S7c).",
+         "The per-biospecimen rows are descriptive only: the three multi-biospecimen donors "
+         "appear more than once, so the 23 rows are not independent.",
+         "Both quantities are recomputed from the atlas at each unit with the definitions used "
+         "throughout: epithelial APM is the mean of gene-wise z-scored per-unit mean expression "
+         "of the five harmonised genes, and the outcome is the percentage of CD8+ cells with "
+         "detected TNFRSF9.",
+         "The direction and significance of the principal association, and the central null, "
+         "hold under every unit."]),
+    "S3c_confounder_sensitivity": (
+        "Supplementary Table S3c. Shared-technical-driver sensitivity for the post hoc "
+        "epithelial APM versus TNFRSF9-defined CD8 abundance association (Chan atlas, 19 donors).",
         pd.read_csv(os.path.join(SRC, "SuppTable_Axis_ConfounderSensitivity_v3.csv")),
         ["Both correlated quantities are derived from the same single-cell object, so a shared "
          "technical factor could in principle generate the association. Each row is a rank-based "
@@ -408,24 +389,24 @@ write("SuppTable_S10_Equivalence_and_AxisVsAxis_v3.xlsx", {
          "their designation as supportive.",
          "Sheet S10d lists the association of each candidate driver with the two correlated "
          "quantities; none is significantly associated with both."]),
-    "S10d_candidate_drivers": (
-        "Supplementary Table S10d. Association of each candidate shared technical driver with "
+    "S3e_candidate_drivers": (
+        "Supplementary Table S3e. Association of each candidate shared technical driver with "
         "epithelial APM score and with TNFRSF9-positive abundance.",
         pd.read_csv(os.path.join(SRC, "SuppTable_Axis_CandidateDrivers_v3.csv")),
         ["No candidate driver is significantly associated with both quantities "
          "(all |r| <= 0.38, P >= 0.11).",
          "Sequencing depth is the strongest single candidate and is the covariate that attenuates "
          "the association most (from r = +0.614 to r = +0.509)."]),
-    "S10b_adjudication": (
-        "Supplementary Table S10b. Per-specimen pathology adjudication of the 17 sequenced "
+    "S3a_adjudication": (
+        "Supplementary Table S3a. Per-specimen pathology adjudication of the 17 sequenced "
         "specimens.", adj,
         ["Adjudication was performed by the institutional pathology service against the original "
          "pathology reports and slides, without reference to any analysis result."])})
 
-# ------------------------------------------------------------------ S11
+# ------------------------------------------------------------------ S9
 s11 = pd.read_csv(os.path.join(SRC, "SuppTable_DetectionDepth_Sensitivity_v3.csv"))
-write("SuppTable_S11_DetectionDepth_Sensitivity_v3.xlsx", {"S11": (
-    "Supplementary Table S11. Sequencing-depth sensitivity analyses for the TNFRSF9-defined CD8 "
+write("SuppTable_S9_DetectionDepth_Sensitivity_v3.xlsx", {"S9": (
+    "Supplementary Table S9. Sequencing-depth sensitivity analyses for the TNFRSF9-defined CD8 "
     "phenotype (Chan atlas).", s11,
     ["TNFRSF9 positivity and marker positivity are both defined by transcript detection in the "
      "same cells, so global detection depth could in principle generate co-detection. These "
@@ -437,10 +418,10 @@ write("SuppTable_S11_DetectionDepth_Sensitivity_v3.xlsx", {"S11": (
      "within-donor total-count-decile matching.",
      "GZMB is not significant in any of these analyses, which reinforces its exploratory status."])})
 
-# ------------------------------------------------------------------ S13
+# ------------------------------------------------------------------ S10
 s13 = pd.read_csv(os.path.join(SRC, "SuppTable_CCLE_LeukocyteFree_Falsification_v3.csv"))
-write("SuppTable_S13_CCLE_LeukocyteFree_Falsification_v3.xlsx", {"S13": (
-    "Supplementary Table S13. Leukocyte-free falsification test of the bulk DLL3-APM "
+write("SuppTable_S10_CCLE_LeukocyteFree_Falsification_v3.xlsx", {"S10": (
+    "Supplementary Table S10. Leukocyte-free falsification test of the bulk DLL3-APM "
     "association in 59 DepMap/CCLE small cell lung cancer cell lines.",
     s13,
     ["Rationale: if the bulk DLL3-APM inverse association is compositional, it must disappear in "
@@ -461,46 +442,50 @@ write("SuppTable_S13_CCLE_LeukocyteFree_Falsification_v3.xlsx", {"S13": (
      "(PTPRC adjustment in tissue; epithelial single-cell; leukocyte-free cell lines), not as "
      "proof on its own."])})
 
-# ------------------------------------------------------------------ S12
+# ------------------------------------------------------------------ S13
 s12 = pd.DataFrame([
     ("s01_axis1_vs_axis2_direct_test.py",
-     "Chan per-donor epithelial APM; axis-versus-axis direct test; TOST equivalence bounds", "S10"),
+     "Chan per-donor epithelial APM; axis-versus-axis direct test; TOST equivalence bounds", "S3"),
     ("s02_external_replication_harmonised.py",
      "Jiang + George/Cologne harmonized 5-gene APM; stepwise NE and PTPRC adjustment; "
-     "fixed-effect meta-analysis", "S9, Figure 2D-F"),
+     "fixed-effect meta-analysis", "S6, Figure 2A-C"),
     ("s03_detection_depth_sensitivity.py",
      "Sequencing-depth exposure check; cell-level logistic models; continuous-expression and "
-     "depth-matched paired tests; per-donor cell counts", "S6, S11"),
+     "depth-matched paired tests; per-donor cell counts", "S7, S9"),
     ("s04_discovery_cohort_N15.py",
      "Institutional discovery cohort at N = 15 adjudicated SCLC, with the N = 17 "
-     "diagnosis-inclusive sensitivity analysis", "S5, S7, Figure 2A-C"),
+     "diagnosis-inclusive sensitivity analysis", "S1, S5, Figure 2E-G"),
     ("s05_generate_supplementary_tables_v3.py",
      "This script; generates Supplementary Tables S1-S13 from the derived outputs", "S1-S13"),
-    ("s06_generate_main_figures_v3.py", "Main Figures 1, 2 and 4 from the derived outputs",
-     "Figures 1, 2, 4"),
+    ("s06_generate_main_figures_v3.py", "Main Figures 1, 2 and 5 from the derived outputs",
+     "Figures 1, 2, 5"),
     ("s07_generate_figure3_and_supplementary_figures_v3.py",
-     "Main Figure 3 and Supplementary Figures S1-S10; per-donor paired plot data",
-     "Figure 3, Supplementary Figures S1-S10"),
-    ("s08_generate_tables_and_docx_v3.py", "Main Tables 1-2 (Word) and the manuscript DOCX",
-     "Tables 1, 2"),
+     "Main Figures 3 and 4 and Supplementary Figures S1-S10; per-donor paired plot data",
+     "Figures 3, 4, Supplementary Figures S1-S10"),
+    ("s08_generate_tables_and_docx_v3.py", "Main Table 1 (Word), Supplementary Table S11 and the manuscript DOCX",
+     "Table 1, S11"),
     ("s09_verify_manuscript_numbers_v3.py",
      "Verification: every quoted statistic, panel reference, citation and format rule is "
      "re-checked against the derived outputs; fails on any mismatch", "none (verification)"),
     ("s10_axis_confounder_sensitivity.py",
      "Shared-technical-factor sensitivity for the epithelial APM versus TNFRSF9+ CD8 test "
-     "(rank-based partial correlations; candidate-driver associations)", "S10c, S10d"),
+     "(rank-based partial correlations; candidate-driver associations)", "S3c, S3e"),
+    ("s14_specimen_unit_sensitivity.py",
+     "Unit-of-analysis sensitivity: the principal post hoc test and the central null computed per "
+     "biospecimen, in single-biospecimen donors, and with one biospecimen per donor", "S7c, S3d"),
+    ("s13_graphical_abstract.py", "Graphical Abstract", "none (submission item)"),
     ("s11_leukocyte_free_falsification.py",
      "DepMap/CCLE SCLC cell lines: DLL3 versus the five-gene APM module in a leukocyte-free "
-     "system, with DLL3-ASCL1 positive control and PTPRC purity checks", "S13"),
+     "system, with DLL3-ASCL1 positive control and PTPRC purity checks", "S10"),
     ("20_Master_Regenerate_All_Statistics.py",
      "v2 master statistics (Jiang individual genes, Chan paired tests, mIF), retained unchanged "
-     "where the pathology adjudication does not apply", "S3, S6b, Table 1"),
+     "where the pathology adjudication does not apply", "S7b, S11, S12"),
 ], columns=["Script", "What it computes", "Supplementary items produced"])
-write("SuppTable_S12_Script_Manifest_v3.xlsx", {"S12": (
-    "Supplementary Table S12. Analysis script manifest and reproducibility.", s12,
+write("SuppTable_S13_Script_Manifest_v3.xlsx", {"S13": (
+    "Supplementary Table S13. Analysis script manifest and reproducibility.", s12,
     ["Environment: Python 3.9.2; numpy 1.26.4; pandas 2.3.3; scipy 1.13.1; statsmodels 0.14.6; "
      "anndata 0.10.9; matplotlib 3.9.4; scanpy; openpyxl. Wilcoxon signed-rank P values depend on "
-     "the SciPy version's default method (SciPy 1.17 gives P = 0.0094 for the Figure 3E lineage "
+     "the SciPy version's default method (SciPy 1.17 gives P = 0.0094 for the Figure 3D lineage "
      "test); every reported value is from SciPy 1.13.1.",
      "Random seed 20260806 for all bootstrap and matching procedures in v3 scripts; seed "
      "20260725 for retained v2 outputs.",

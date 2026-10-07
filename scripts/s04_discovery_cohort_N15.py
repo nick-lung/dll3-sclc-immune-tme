@@ -43,6 +43,12 @@ def boot_ci(x, y, n_boot=N_BOOT):
     return float(np.percentile(v, 2.5)), float(np.percentile(v, 97.5))
 
 
+def fisher_ci(r, n, a=0.05):
+    z, se = np.arctanh(r), 1 / np.sqrt(n - 3)
+    k = stats.norm.ppf(1 - a / 2)
+    return float(np.tanh(z - k * se)), float(np.tanh(z + k * se))
+
+
 def loo(x, y):
     x, y = np.asarray(x, float), np.asarray(y, float)
     v = [stats.spearmanr(np.delete(x, i), np.delete(y, i)).statistic for i in range(len(x))]
@@ -83,9 +89,12 @@ def analyse(cols, label, role):
     l0, l1 = loo(dll3, ratio)
     print(f"  CD274/APM ratio ~ DLL3        r={r:+.4f}  P={p:.4f}  boot95%[{lo:+.3f},{hi:+.3f}]"
           f"  LOO[{l0:+.3f},{l1:+.3f}]")
+    # the text reports Fisher z intervals throughout; the bootstrap interval stays as ci_low/ci_high
+    flo, fhi = fisher_ci(r, n)
     rows.append(dict(population=label, n=n, measure="CD274_APM_ratio~DLL3", estimate=round(r, 4),
                      ci_low=round(lo, 4), ci_high=round(hi, 4), p=round(p, 4),
-                     extra=f"LOO {l0:+.4f} to {l1:+.4f}", role=role))
+                     extra=f"LOO {l0:+.4f} to {l1:+.4f}", role=role,
+                     fisher_ci_low=round(flo, 4), fisher_ci_high=round(fhi, 4)))
 
     med = dll3.median()
     u, pmed = stats.mannwhitneyu(ratio[dll3 >= med], ratio[dll3 < med])

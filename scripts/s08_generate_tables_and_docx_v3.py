@@ -43,7 +43,7 @@ def _fmt_p(p):
 def ax_row(key, label, role, status_fn):
     r = _A12.loc[key]
     return (f"Feature 1 vs feature 2 (post hoc){'' if role.startswith('Post') else ''}",
-            f"Chan atlas ({int(r.n)} samples)",
+            f"Chan atlas ({int(r.n)} donors)",
             f"Epithelial APM ~ {label}, Spearman",
             f"r = {r.spearman_r:+.3f}",
             f"{r.ci_low:+.3f} to {r.ci_high:+.3f}",
@@ -53,7 +53,10 @@ def ax_row(key, label, role, status_fn):
 
 
 _PRIN = _A12.loc["TNFRSF9pos_pct_of_CD8"]
+_A12_R_MIN, _A12_R_MAX = _A12.spearman_r.min(), _A12.spearman_r.max()
 _EPI_CTX = _CTX.loc["epithelial_APM_z_5gene_primary"]
+_DISC = pd.read_csv(os.path.join(SRC, "Discovery_Statistics_N15_primary_v3.csv"))
+_DISC = _DISC[(_DISC.population == "SCLC15") & (_DISC.measure == "CD274_APM_ratio~DLL3")].iloc[0]
 
 
 def styled_doc(landscape=False):
@@ -101,7 +104,7 @@ def add_table(doc, df, title, notes, colwidths=None):
     return doc
 
 
-# ------------------------------------------------------------------ TABLE 1
+# ------------------------------------------------------------------ SUPPLEMENTARY TABLE S11
 T1 = pd.DataFrame([
     # Feature 1
     ("Feature 1: lower bulk APM signal", "Jiang tumours (n = 79)", "DLL3 ~ APM module, Spearman",
@@ -120,11 +123,12 @@ T1 = pd.DataFrame([
     ("Feature 1: leukocyte-adjusted", "George/Cologne (n = 81)",
      "Standardized OLS β(DLL3), + PTPRC", "β = −0.094", "−0.240 to +0.053", "0.207",
      "Composition sensitivity (post hoc)", "Not significant"),
-    ("Feature 1: tumour-cell level", f"Chan atlas ({int(_EPI_CTX.n)} samples)",
+    ("Feature 1: tumour-cell level", f"Chan atlas ({int(_EPI_CTX.n)} donors)",
      "DLL3 ~ epithelial APM (5-gene), Spearman", f"r = {_EPI_CTX.spearman_r:+.3f}",
      "not estimated", f"{_EPI_CTX.p:.2f}", "Estimand contrast", "Not significant"),
     ("Feature 1: discovery (exploratory)", "Institutional (N = 15 SCLC)",
-     "DLL3 ~ CD274/APM ratio, Spearman", "r = +0.579", "+0.040 to +0.887", "0.024",
+     "DLL3 ~ CD274/APM ratio, Spearman", "r = +0.579",
+     f"{_DISC.fisher_ci_low:+.3f} to {_DISC.fisher_ci_high:+.3f}", "0.024",
      "Exploratory; not replicated", "Significant"),
     ("Feature 1: discovery, adjusted", "Institutional (N = 15 SCLC)",
      "Standardized OLS β(DLL3), + IFNG + NE lineage", "β = +0.297", "−0.621 to +1.216", "0.48",
@@ -153,23 +157,23 @@ T1 = pd.DataFrame([
      "1.2 × 10⁻⁴ / 5.9 × 10⁻⁵",
      "Supportive tissue-level co-expression; NOT validation of a single-cell state", "Significant"),
     # The central link
-    ("CENTRAL LINK: DLL3 vs feature 2", "Chan atlas (19 samples)",
+    ("CENTRAL LINK: DLL3 vs feature 2", "Chan atlas (19 donors)",
      "DLL3 ~ TNFRSF9⁺PD-1⁺ (% of CD8), Spearman", "r = +0.072", "−0.395 to +0.510", "0.77",
      "KEY TEST", "No association detected"),
-    ("CENTRAL LINK: DLL3 vs feature 2", "Chan atlas (19 samples)",
+    ("CENTRAL LINK: DLL3 vs feature 2", "Chan atlas (19 donors)",
      "DLL3 ~ TNFRSF9⁺ (% of CD8), Spearman", "r = +0.105", "−0.366 to +0.534", "0.67",
      "KEY TEST", "No association detected"),
-    ("CENTRAL LINK: DLL3 vs feature 2", "Chan atlas (19 samples)",
+    ("CENTRAL LINK: DLL3 vs feature 2", "Chan atlas (19 donors)",
      "DLL3 ~ TNFRSF9⁺TIM-3⁺ (% of CD8), Spearman", "r = +0.042", "−0.420 to +0.487", "0.86",
      "KEY TEST", "No association detected"),
-    ("CENTRAL LINK: equivalence bound", "Chan atlas (19 samples)",
+    ("CENTRAL LINK: equivalence bound", "Chan atlas (19 donors)",
      "Smallest supported equivalence margin (TOST)", "|ρ| = 0.425 to 0.475", "descriptive",
      "—", "Bounds the null", "Moderate association NOT excluded"),
     # Axis vs axis  (values read from the derived table, never transcribed)
     ax_row("TNFRSF9pos_pct_of_CD8", "TNFRSF9⁺ (% of CD8)",
            "Post hoc direct test — principal endpoint", lambda r: "Significant"),
     ("Feature 1 vs feature 2, cell-count sensitivity",
-     f"Chan atlas ({int(_PRIN.n_cd8_ge20)} and {int(_PRIN.n_cd8_ge50)} samples)",
+     f"Chan atlas ({int(_PRIN.n_cd8_ge20)} and {int(_PRIN.n_cd8_ge50)} donors)",
      "Same, restricted to ≥20 and ≥50 CD8⁺ cells",
      f"r = {_PRIN.r_cd8_ge20:+.3f} / {_PRIN.r_cd8_ge50:+.3f}", "not estimated",
      f"{_PRIN.p_cd8_ge20:.4f} / {_PRIN.p_cd8_ge50:.3f}",
@@ -180,12 +184,6 @@ T1 = pd.DataFrame([
     ax_row("TNFRSF9+PD1+_pct_of_CD8", "TNFRSF9⁺PD-1⁺ (% of CD8)",
            "Supportive nested endpoint",
            lambda r: f"Not robust (P = {r.p_cd8_ge50:.3f} at ≥50 cells)"),
-    # Secondary
-    ("Secondary: macrophage state", "Jiang tumours (n = 79)", "DLL3 ~ M2 module, Spearman",
-     "r = −0.397", "not estimated", "0.0003", "Secondary", "Significant"),
-    ("Secondary: macrophage state", "Jiang tumours (n = 79)",
-     "Standardized OLS β(DLL3), + NE lineage", "β = −0.201", "−0.413 to +0.011", "0.063",
-     "Secondary", "Not significant"),
     # mIF
     ("mIF phenotypes", "Institutional (10 patients, 193 ROIs)",
      "All 51 derived phenotypes vs continuous DLL3 H-score, patient-level",
@@ -193,67 +191,69 @@ T1 = pd.DataFrame([
      "Tested; none significant", "Not significant"),
 ], columns=["Finding", "Dataset", "Measure", "Effect", "95% CI", "P", "Role", "Status"])
 
-doc = styled_doc(landscape=True)
-add_table(doc, T1,
-          "Table 1. All key statistics across platforms, with the role and inferential status of "
-          "each.",
-          ["APM, antigen-presentation machinery; CI, confidence interval; NE, neuroendocrine; "
+# The cross-platform statistics table is a supplementary table (S11); the main text keeps
+# only the study-design table. Same layout as s05: title row, table from row 3, footnotes below.
+_S11 = os.path.join(V3, "supplementary", "SuppTable_S11_Key_Statistics_All_Platforms_v3.xlsx")
+_S11_NOTES = ["APM, antigen-presentation machinery; CI, confidence interval; NE, neuroendocrine; "
            "OLS, ordinary least squares; OR, odds ratio; pp, percentage points; ROI, region of "
            "interest; TOST, two one-sided tests.",
            "The institutional discovery cohort is N = 15 pathologically adjudicated SCLC. Two of "
            "the 17 sequenced specimens were adjudicated as large-cell neuroendocrine carcinoma "
-           "and excluded (Supplementary Tables S8 and S10b).",
+           "and excluded (Supplementary Tables S4 and S3a).",
            "The APM module uses the same five genes (HLA-A, HLA-B, B2M, TAP1, TAP2) in both "
            "external cohorts.",
            "Analyses labelled post hoc were performed after the primary results were assembled.",
            "The mIF row reports the complete 51-phenotype family. No phenotype is singled out, "
-           "because none is significant; the full result is in Supplementary Table S3 and "
-           "Supplementary Figure S8.",
+           "because none is significant; the full result is in Supplementary Table S12 and "
+           "Supplementary Figure S10.",
            "Bulk TNFRSF9 co-expression is supportive tissue-level evidence. It does not "
            "demonstrate co-expression within individual cells and is not validation of the "
            "single-cell phenotype.",
            "For the feature-1-versus-feature-2 test, only the single-gated TNFRSF9⁺ abundance "
            "endpoint is robust to minimum CD8 cell counts. The doubly-gated endpoints are "
            "directionally concordant but are estimated from progressively smaller cell pools and "
-           "lose significance at a ≥50-cell threshold; they are reported as supportive only."],
-          colwidths=[1.5, 1.4, 2.0, 1.2, 1.2, 0.9, 1.5, 1.2])
-doc.save(os.path.join(OUT, "Table1_v3_Key_Results_CrossPlatform_Statistics.docx"))
-print("  Table1_v3_Key_Results_CrossPlatform_Statistics.docx")
+           "lose significance at a ≥50-cell threshold; they are reported as supportive only."]
+with pd.ExcelWriter(_S11, engine="openpyxl") as w:
+    pd.DataFrame([["Supplementary Table S11. All key statistics across platforms, with the role and "
+                   "inferential status of each."]]).to_excel(w, sheet_name="S11", index=False,
+                                                            header=False, startrow=0)
+    T1.to_excel(w, sheet_name="S11", index=False, startrow=2)
+    pd.DataFrame([[n] for n in _S11_NOTES]).to_excel(w, sheet_name="S11", index=False, header=False,
+                                                     startrow=2 + len(T1) + 3)
+print("  SuppTable_S11_Key_Statistics_All_Platforms_v3.xlsx")
 
-# ------------------------------------------------------------------ TABLE 2
+# ------------------------------------------------------------------ TABLE 1
 T2 = pd.DataFrame([
     ("Feature 1. DLL3-high SCLC shows a lower bulk antigen-presentation signal.",
      "Institutional RNA-seq (N = 15)", "Discovery / exploratory",
      "CD274/APM ratio rises with DLL3 (r = +0.579); direct DLL3–APM correlation not significant"),
     ("", "Jiang GSE60052 (n = 79 tumours)", "External replication (primary)",
-     "r = −0.299, P = 0.0075; all LOO iterations negative"),
+     "r = −0.299, P = 0.0075"),
     ("", "George/Cologne (n = 81 tumours)", "External replication (independent)",
      "r = −0.411, P = 1.4 × 10⁻⁴; pooled r = −0.357"),
     ("", "Both external cohorts, + PTPRC", "Composition sensitivity (post hoc)",
      "Association markedly attenuated in both (P = 0.32 and 0.21)"),
     ("", "Chan atlas, epithelial cells", "Estimand contrast",
-     "No tumour-cell-level association (r = +0.040, P = 0.87)"),
+     f"No tumour-cell-level association (r = {_EPI_CTX.spearman_r:+.3f}, "
+     f"P = {_EPI_CTX.p:.2f})"),
     ("Feature 2. A TNFRSF9-defined, PD-1/TIM-3-marker-high CD8 phenotype is present in SCLC.",
-     "Chan atlas, within-donor paired (15 evaluable)", "Primary",
+     "Chan atlas, within-donor paired (15 evaluable donors)", "Primary",
      "PD-1 +18.5 pp (P = 1.8 × 10⁻⁴); TIM-3 +26.0 pp (P = 6.1 × 10⁻⁵)"),
     ("", "Chan atlas, cell-level depth-adjusted models", "Technical sensitivity",
      "Survives adjustment for library size, subtype and donor (OR 1.96 and 3.04)"),
     ("", "Institutional and Jiang bulk RNA-seq", "Supportive tissue-level",
      "Bulk TNFRSF9 tracks effector and exhaustion modules; not single-cell co-expression"),
     ("Central question. Does baseline DLL3 predict the baseline abundance of feature 2?",
-     "Chan atlas (19 samples)", "KEY TEST",
+     "Chan atlas (19 donors)", "KEY TEST",
      "No association detected (r = +0.042 to +0.105, all P > 0.6)"),
     ("", "Chan atlas, TOST", "Bounds the null",
      "Equivalence supported only within |ρ| ≈ 0.45; a moderate association is not excluded"),
-    ("", "GSE319155 (n = 7)", "Supplementary concordance",
+    ("", "GSE319155 (n = 7)", "Supportive concordance",
      "Directionally concordant null (r = 0.000)"),
     ("Are the two features independent of each other?",
-     "Chan atlas (19 samples)", "Post hoc direct test",
-     "No. They are positively correlated (r = +0.465 to +0.612, all P < 0.05)"),
-    ("Secondary. Macrophage-state remodelling.", "Jiang tumours; Chan myeloid",
-     "Secondary; requires dedicated validation",
-     "M2 module associated with DLL3-low tumours but not after NE adjustment; myeloid cells form "
-     "a dual-polarized and a quiescent metacluster"),
+     "Chan atlas (19 donors)", "Post hoc direct test",
+     f"No. They are positively correlated (r = {_A12_R_MIN:+.3f} to {_A12_R_MAX:+.3f}, "
+     f"all P < 0.05)"),
     ("Orthogonal phenotype context. mIF.", "Institutional (10 patients, 193 ROIs)",
      "Descriptive only; supports no inference",
      "0 of 51 phenotypes significant after correction across the full family"),
@@ -261,15 +261,15 @@ T2 = pd.DataFrame([
 
 doc = styled_doc(landscape=True)
 add_table(doc, T2,
-          "Table 2. Study questions, the role of each dataset, and what each contributes.",
-          ["LOO, leave-one-out; TOST, two one-sided tests.",
+          "Table 1. Study questions, the role of each dataset, and what each contributes.",
+          ["TOST, two one-sided tests.",
            "Blank cells in the first column continue the feature or question named in the row "
            "above.",
            "The discovery and mIF cohorts are not independent: all 10 mIF patients are among the "
            "15 RNA-sequenced SCLC patients."],
           colwidths=[2.2, 1.9, 1.9, 3.6])
-doc.save(os.path.join(OUT, "Table2_v3_Questions_and_Dataset_Roles.docx"))
-print("  Table2_v3_Questions_and_Dataset_Roles.docx")
+doc.save(os.path.join(OUT, "Table1_v3_Questions_and_Dataset_Roles.docx"))
+print("  Table1_v3_Questions_and_Dataset_Roles.docx")
 
 
 # ------------------------------------------------------------------ MANUSCRIPT DOCX
