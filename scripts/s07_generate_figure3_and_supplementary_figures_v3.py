@@ -343,9 +343,7 @@ def suppS1_S2():
     ax.set_xlabel("Effect estimate (Spearman $r$, or standardized OLS β for the adjusted model)",
                   fontsize=7.2)
     ax.legend(fontsize=6.4, loc="lower right", frameon=False)
-    ax.set_title("Supplementary Figure S3. Institutional discovery cohort: every key statistic "
-                 "under the\nprimary (N = 15) and diagnosis-inclusive sensitivity (N = 17) "
-                 "populations", fontsize=8, loc="left", weight="bold")
+    ax.set_title("Supplementary Figure S3. Discovery-cohort estimates before and after pathology adjudication", fontsize=8, loc="left", weight="bold")
     ax.tick_params(labelsize=6.3)
     save(fig, "SuppFigureS3_v3_Discovery_Adjudication_Sensitivity")
 
@@ -371,8 +369,7 @@ def suppS1_S2():
                     color="white" if abs(C.values[i, j]) > .6 else "#222")
     cb = fig.colorbar(im, fraction=.046, pad=.02); cb.set_label("Spearman ρ", fontsize=7)
     cb.ax.tick_params(labelsize=6)
-    ax.set_title("Supplementary Figure S4. Gene-gene correlation structure in the institutional\n"
-                 "discovery cohort ($N$ = 15 pathologically adjudicated SCLC)",
+    ax.set_title("Supplementary Figure S4. Discovery-cohort gene correlations",
                  fontsize=8, loc="left", weight="bold")
     save(fig, "SuppFigureS4_v3_Discovery_Correlation_Matrix_N15")
 
@@ -414,9 +411,7 @@ def suppS3_S4():
         for e, y_, p_ in zip(est, yy, pv):
             ax.text(e, y_ + .22, f"$P$ = {p_:.3f}" if p_ >= .001 else "$P$ < 0.001",
                     ha="center", fontsize=5.4)
-    fig.suptitle("Supplementary Figure S1. DLL3 versus individual antigen-presentation genes in "
-                 "both external cohorts\n(red = P < 0.05; HLA-C has zero variance in the Cologne "
-                 "matrix and is not estimable there)",
+    fig.suptitle("Supplementary Figure S1. DLL3 correlations with individual APM genes",
                  fontsize=8, x=0.01, ha="left", weight="bold", y=1.06)
     save(fig, "SuppFigureS1_v3_Individual_APM_Genes_Both_Cohorts")
 
@@ -436,9 +431,7 @@ def suppS3_S4():
         ax.text(.04, .1, f"$r$ = {r:+.3f}\n$P$ = {p:.1e}", transform=ax.transAxes, fontsize=6.6)
         ax.set_title(name, fontsize=8, loc="left", weight="bold")
         ax.tick_params(labelsize=6.3)
-    fig.suptitle("Supplementary Figure S2. DLL3-high tumours contain less leukocyte transcript in "
-                 "both external cohorts.\nThis is the composition signal that attenuates the "
-                 "DLL3–APM association (post hoc).",
+    fig.suptitle("Supplementary Figure S2. DLL3–$PTPRC$ correlations in the external cohorts",
                  fontsize=8, x=0.01, ha="left", weight="bold", y=1.08)
     save(fig, "SuppFigureS2_v3_DLL3_vs_PTPRC_Both_Cohorts")
 
@@ -464,9 +457,7 @@ def suppS5_S6_S7():
         ax.text(.03, .96, f"AUC = {auc:.3f}\n$P$ = {p:.1e}", transform=ax.transAxes,
                 fontsize=6.0, va="top")
         ax.tick_params(labelsize=6.3)
-    fig.suptitle("Supplementary Figure S5. Sequencing depth differs modestly between $TNFRSF9^+$ "
-                 "and $TNFRSF9^-$ CD8$^+$ cells.\nAn AUC near 0.6 is a small difference; "
-                 "Supplementary Figure S6 shows it does not account for the finding.",
+    fig.suptitle("Supplementary Figure S5. Sequencing depth by $TNFRSF9$ status",
                  fontsize=8, x=0.01, ha="left", weight="bold", y=1.10)
     save(fig, "SuppFigureS5_v3_Detection_Depth_Distributions")
 
@@ -514,9 +505,7 @@ def suppS5_S6_S7():
     ax.set_title("(B) Continuous expression, not binary detection", fontsize=8, loc="left",
                  weight="bold")
     ax.tick_params(labelsize=6.3)
-    fig.suptitle("Supplementary Figure S6. The $TNFRSF9$-defined phenotype survives adjustment for "
-                 "sequencing depth.\n$GZMB$ does not, which is why the effector arm is reported as "
-                 "exploratory.",
+    fig.suptitle("Supplementary Figure S6. Depth-adjusted marker positivity and continuous expression",
                  fontsize=8, x=0.01, ha="left", weight="bold", y=1.07)
     save(fig, "SuppFigureS6_v3_DepthAdjusted_Models")
 
@@ -553,8 +542,7 @@ def suppS5_S6_S7():
     ax.set_title("(B) Texh cells are concentrated in one donor", fontsize=8, loc="left",
                  weight="bold")
     ax.tick_params(labelsize=6.3)
-    fig.suptitle("Supplementary Figure S7. Per-sample cell counts underlying every Chan atlas "
-                 "analysis.\n15 of 19 samples meet the primary evaluability rule.",
+    fig.suptitle("Supplementary Figure S7. Donor cell counts in the Chan atlas",
                  fontsize=8, x=0.01, ha="left", weight="bold", y=1.06)
     save(fig, "SuppFigureS7_v3_PerDonor_Cell_Counts")
 
@@ -582,9 +570,7 @@ def suppS8_S9_S10():
                         f"$n$ = 10 patients; every interval crosses zero.",
             transform=ax.transAxes, fontsize=6.6, va="bottom", ha="right",
             bbox=dict(fc="#FBEDED", ec=RED, lw=.8, boxstyle="round,pad=0.4"))
-    ax.set_title("Supplementary Figure S10. Complete multiplex-immunofluorescence result: all 51 "
-                 "phenotypes.\nNo subset is selected; ordering is by effect size and confers no "
-                 "significance.", fontsize=8, loc="left", weight="bold")
+    ax.set_title("Supplementary Figure S10. DLL3 correlations with all 51 mIF phenotypes", fontsize=8, loc="left", weight="bold")
     ax.tick_params(labelsize=6.3)
     save(fig, "SuppFigureS10_v3_mIF_All51_EffectSizes")
 
@@ -609,9 +595,7 @@ def suppS8_S9_S10():
     ax.text(.99, .55, "Equivalence is supported only to the RIGHT of each dotted line.\n"
                       f"No margin below |ρ| = {eq.smallest_equivalence_margin.min():.3f} is supported by these data.",
             transform=ax.transAxes, fontsize=6.4, ha="right", va="top", color="#333")
-    ax.set_title("Supplementary Figure S8. What the central null can and cannot exclude "
-                 "(two one-sided tests).\nMargins were not pre-specified, so these bounds are "
-                 "descriptive.", fontsize=8, loc="left", weight="bold")
+    ax.set_title("Supplementary Figure S8. Equivalence bounds for DLL3–abundance correlations", fontsize=8, loc="left", weight="bold")
     ax.tick_params(labelsize=6.3)
     save(fig, "SuppFigureS8_v3_Equivalence_Bounds")
 
@@ -638,11 +622,7 @@ def suppS8_S9_S10():
                           f"{role}",
                 transform=ax.transAxes, fontsize=5.6, va="top")
         ax.tick_params(labelsize=6.3)
-    fig.suptitle("Supplementary Figure S9. POST HOC direct test of the two immune features "
-                 "against each other (Chan atlas, 19 donors).\nThey are positively correlated, "
-                 "so they are not independent axes. Only the single-gated principal endpoint is "
-                 "robust to\nminimum CD8 cell counts; the doubly-gated endpoints are supportive "
-                 "only.",
+    fig.suptitle("Supplementary Figure S9. Epithelial APM and $TNFRSF9^+$ CD8$^+$ T-cell abundance",
                  fontsize=8, x=0.01, ha="left", weight="bold", y=1.16)
     save(fig, "SuppFigureS9_v3_Axis1_vs_Axis2")
 
