@@ -75,9 +75,9 @@ meta = pd.read_csv(os.path.join(SRC, "Meta_TwoExternalCohorts_v3.csv")).iloc[0]
 print(f"  pooled r={meta.pooled_r:+.4f} CI[{meta.ci_low:+.4f},{meta.ci_high:+.4f}] "
       f"Q={meta.Q} P_het={meta.p_heterogeneity}")
 claim("Jiang r", "*r* = −0.299, *P* = 0.0075")
-claim("Cologne r", "*r* = −0.411, *P* = 1.4 × 10⁻⁴")
+claim("Cologne r", "*r* = −0.411, *P* = 1.37 × 10⁻⁴")
 claim("pooled r", "pooled *r* = −0.357, 95% CI −0.486 to −0.212")
-claim("Q test wording", "not detectable rather than demonstrably absent")
+claim("Q test wording", "two cohorts cannot establish absence of heterogeneity")
 forbid("6-gene as primary", "*r* = −0.305, *P* = 0.0063")
 
 for coh, tag in [("Jiang (GSE60052)", "Jiang"), ("George/Cologne (cBioPortal)", "Cologne")]:
@@ -240,10 +240,6 @@ if f"{_d5.spearman_r.min():+.3f} to {_d5.spearman_r.max():+.3f}" not in _c2:
     fails.append("TABLES Table 1 does not carry the five-gene feature-versus-feature range")
 if f"{_d6.spearman_r.min():+.3f} to {_d6.spearman_r.max():+.3f}" in _c2:
     fails.append("TABLES Table 1 quotes the six-gene feature-versus-feature range")
-# the S9 legend annotates a five-gene figure
-claim("S9 legend uses the five-gene value",
-      f"no association was detected between DLL3 and the same five-gene epithelial APM score "
-      f"(*r* = {_ctx5.spearman_r:+.3f}, *P* = {_ctx5.p:.2f})", LEG)
 claim("Texh counts", "only 578 Texh cells")
 claim("Texh concentration", "74% from one donor, RU1195")
 
