@@ -162,7 +162,7 @@ cnt = c8.groupby("donor", observed=True).agg(
     n_CD8=("ct", "size"),
     n_TNFRSF9_pos=("TNFRSF9_pos", "sum"),
     n_TNFRSF9_neg=("TNFRSF9_pos", lambda s: int((~s).sum())),
-    n_TNFRSF9_PD1_pos=("PDCD1_pos", "sum"),
+    n_PD1_pos=("PDCD1_pos", "sum"),   # PDCD1+ among ALL CD8 cells of the donor
     median_total_counts=("total_counts", "median"),
     median_genes=("n_genes", "median"))
 for ct in CD8:

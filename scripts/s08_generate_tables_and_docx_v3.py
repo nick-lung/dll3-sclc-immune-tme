@@ -234,8 +234,8 @@ T2 = pd.DataFrame([
     ("", "Both external cohorts, + PTPRC", "Composition sensitivity (post hoc)",
      "Association markedly attenuated in both (P = 0.32 and 0.21)"),
     ("", "Chan atlas, epithelial cells", "Estimand contrast",
-     f"No tumour-cell-level association (r = {_EPI_CTX.spearman_r:+.3f}, "
-     f"P = {_EPI_CTX.p:.2f})"),
+     f"No association with donor-level mean epithelial expression "
+     f"(r = {_EPI_CTX.spearman_r:+.3f}, P = {_EPI_CTX.p:.2f})"),
     ("Feature 2. A TNFRSF9-defined, PD-1/TIM-3-marker-high CD8 phenotype is present in SCLC.",
      "Chan atlas, within-donor paired (15 evaluable donors)", "Primary",
      "PD-1 +18.5 pp (P = 1.8 × 10⁻⁴); TIM-3 +26.0 pp (P = 6.1 × 10⁻⁵)"),
@@ -243,26 +243,26 @@ T2 = pd.DataFrame([
      "Survives adjustment for library size, subtype and donor (OR 1.96 and 3.04)"),
     ("", "Institutional and Jiang bulk RNA-seq", "Supportive tissue-level",
      "Bulk TNFRSF9 tracks effector and exhaustion modules; not single-cell co-expression"),
-    ("Central question. Does baseline DLL3 predict the baseline abundance of feature 2?",
-     "Chan atlas (19 donors)", "KEY TEST",
+    ("Central question. Is baseline DLL3 associated with the baseline abundance of feature 2?",
+     "Chan atlas (19 donors)", "Donor-level Spearman correlation",
      "No association detected (r = +0.042 to +0.105, all P > 0.6)"),
-    ("", "Chan atlas, TOST", "Bounds the null",
+    ("", "Chan atlas, TOST", "Equivalence analysis",
      "Equivalence supported only within |ρ| ≈ 0.45; a moderate association is not excluded"),
     ("", "GSE319155 (n = 7)", "Supportive concordance",
      "Directionally concordant null (r = 0.000)"),
-    ("Are the two features independent of each other?",
-     "Chan atlas (19 donors)", "Post hoc direct test",
-     f"No. They are positively correlated (r = {_A12_R_MIN:+.3f} to {_A12_R_MAX:+.3f}, "
-     f"all P < 0.05)"),
+    ("How are the two features related?",
+     "Chan atlas (19 donors)", "Post hoc Spearman correlation",
+     f"The epithelial APM score and the TNFRSF9⁺ CD8 fractions are positively "
+     f"correlated (r = {_A12_R_MIN:+.3f} to {_A12_R_MAX:+.3f}, all P < 0.05)"),
     ("Orthogonal phenotype context. mIF.", "Institutional (10 patients, 193 ROIs)",
-     "Descriptive only; supports no inference",
+     "Descriptive",
      "0 of 51 phenotypes significant after correction across the full family"),
 ], columns=["Question or feature", "Dataset", "Role in the study", "Result"])
 
 doc = styled_doc(landscape=True)
 add_table(doc, T2,
           "Table 1. Study questions, the role of each dataset, and what each contributes.",
-          ["TOST, two one-sided tests.",
+          ["APM, antigen-presentation machinery; mIF, multiplex immunofluorescence; OR, odds ratio; pp, percentage points; ROI, region of interest; TOST, two one-sided tests.",
            "Blank cells in the first column continue the feature or question named in the row "
            "above.",
            "The discovery and mIF cohorts are not independent: all 10 mIF patients are among the "

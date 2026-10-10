@@ -336,7 +336,8 @@ def suppS1_S2():
         ax.scatter(v, yy + off, s=42, c=c, zorder=3, edgecolor="#111", lw=.5, label=lab)
         for vi, yi, k in zip(v, yy + off, keys):
             pv = float(pop[pop.measure == k].p.iloc[0])
-            ax.text(vi, yi + .16, f"{vi:+.3f} ($P$={pv:.3f})", ha="center", fontsize=5.4, color=c)
+            ptxt = f"$P$={pv:.3f}" if pv >= 0.001 else "$P$<0.001"
+            ax.text(vi, yi + .16, f"{vi:+.3f} ({ptxt})", ha="center", fontsize=6.0, color=c)
     ax.axvline(0, color="#222", lw=.9, ls="--")
     ax.set_yticks(yy)
     ax.set_yticklabels([k.replace("_", " ").replace("~", " vs ") for k in keys], fontsize=6.2)
@@ -484,6 +485,7 @@ def suppS5_S6_S7():
     ax.set_yticks(ypos); ax.set_yticklabels(ylab, fontsize=6.0)
     ax.invert_yaxis()
     ax.set_xscale("log")
+    ax.set_xticks([1, 2, 4]); ax.set_xticklabels(["1", "2", "4"])
     ax.set_xlabel("Odds ratio for marker positivity in $TNFRSF9^+$ cells\n"
                   "(cell-level logistic, donor cluster-robust CI)", fontsize=7)
     ax.set_title("(A) Depth- and donor-adjusted models", fontsize=8, loc="left", weight="bold")

@@ -1,4 +1,4 @@
-donor,n_CD8,n_TNFRSF9_pos,n_TNFRSF9_neg,n_TNFRSF9_PD1_pos,median_total_counts,median_genes,n_CD8_Texh,n_CD8_Teff,n_CD8_Tmem,evaluable_primary_min3,n_epithelial
+donor,n_CD8,n_TNFRSF9_pos,n_TNFRSF9_neg,n_PD1_pos,median_total_counts,median_genes,n_CD8_Texh,n_CD8_Teff,n_CD8_Tmem,evaluable_primary_min3,n_epithelial
 PleuralEffusion,196,0,196,12,3184.5,1065.0,6,4,186,False,559
 RU1065,1245,179,1066,176,4926.0,1647.0,30,57,1158,True,177
 RU1066,477,267,210,112,3223.0,1054.0,13,18,446,True,2762
