@@ -386,10 +386,10 @@ print("=" * 82)
 print("2b. NO-CLINICAL-ANNOTATION POLICY (author decision, 2026-08-07)")
 print("=" * 82)
 claim("no-clinical stated in Limitations",
-      "No clinical annotation is reported for the institutional cohort, by design")
-claim("unadjusted acknowledged", "Residual confounding by unmeasured patient characteristics", MS)
-claim("residual confounding acknowledged", "esidual confounding by unmeasured patient characteristics")
-claim("generalisability acknowledged", "generalisability to a defined clinical population is unknown")
+      "Clinical characteristics were not reported or adjusted for")
+claim("unadjusted acknowledged", "preventing assessment of residual confounding", MS)
+claim("residual confounding acknowledged", "assessment of residual confounding")
+claim("generalisability acknowledged", "generalisability to defined clinical populations")
 
 # S1 must carry no clinical columns, and no blank placeholder columns anywhere.
 import openpyxl
