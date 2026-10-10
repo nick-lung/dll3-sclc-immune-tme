@@ -327,7 +327,8 @@ def suppS1_S2():
     # S3: discovery cohort key statistics, N=15 vs N=17
     p15 = stat[stat.population == "SCLC15"]
     p17 = stat[stat.population == "AllSequenced17"]
-    keys = [m for m in p15.measure if m in set(p17.measure) and "median_split" not in m]
+    keys = [m for m in p15.measure if m in set(p17.measure) and "median_split" not in m
+            and "M2_module" not in m]  # the M2 module was removed from the manuscript (v4)
     fig, ax = plt.subplots(figsize=(7.2, 4.0))
     yy = np.arange(len(keys))[::-1]
     for off, pop, c, lab in [(+.17, p15, GREEN, "$N$ = 15 (primary, adjudicated SCLC)"),
@@ -343,7 +344,7 @@ def suppS1_S2():
     ax.set_yticklabels([k.replace("_", " ").replace("~", " vs ") for k in keys], fontsize=6.2)
     ax.set_xlabel("Effect estimate (Spearman $r$, or standardized OLS β for the adjusted model)",
                   fontsize=7.2)
-    ax.legend(fontsize=6.4, loc="lower right", frameon=False)
+    ax.legend(fontsize=6.4, loc="upper left", frameon=False)
     ax.set_title("Supplementary Figure S3. Discovery-cohort estimates before and after pathology adjudication", fontsize=8, loc="left", weight="bold")
     ax.tick_params(labelsize=6.3)
     save(fig, "SuppFigureS3_v3_Discovery_Adjudication_Sensitivity")
