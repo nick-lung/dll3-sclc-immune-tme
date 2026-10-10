@@ -197,7 +197,7 @@ print(f"  unit sensitivity: per biospecimen n={int(_spec.n)} r={_spec.spearman_r
       f"P={_spec.p:.4f} | single-biospecimen donors n={int(_sing.n)} r={_sing.spearman_r:+.3f} "
       f"P={_sing.p:.4f} | one per donor n={int(_one.n)} r={_one.spearman_r:+.3f} P={_one.p:.4f}")
 claim("atlas structure stated", "It holds 23 biospecimens from 19 donors")
-claim("pooling justified", "the unit that avoids pseudoreplication")
+claim("pooling justified", "cells were pooled by donor to avoid pseudoreplication")
 claim("no cross-specimen comparison", "nothing is compared across specimens")
 _units = [_spec.spearman_r, _sing.spearman_r, _one.spearman_r]
 claim("unit sensitivity range",
@@ -281,7 +281,7 @@ claim("normal lung controls", "normal lung controls")
 forbid("AI policy assertion", "consistent with the journal's policy")
 # IJC 4.1.1: the cover letter must carry any disclosure of assistance for writing or editing.
 claim("AI assistance disclosed in cover letter", "**Disclosure of AI assistance.**", CL)
-claim("adjudication stated", "were adjudicated LC-NEC and excluded")
+claim("adjudication stated", "were adjudicated large-cell neuroendocrine carcinoma (LC-NEC) and excluded")
 claim("mIF criterion consistency", "The same diagnostic criterion excluded LC-NEC from the mIF cohort")
 claim("post hoc labelled", "post hoc")
 forbid("exhausted CD8 harbor claim", "harbor more exhausted CD8")
@@ -389,7 +389,7 @@ claim("no-clinical stated in Limitations",
       "No clinical annotation is reported for the institutional cohort, by design")
 claim("unadjusted acknowledged", "Residual confounding by unmeasured patient characteristics", MS)
 claim("residual confounding acknowledged", "esidual confounding by unmeasured patient characteristics")
-claim("generalisability acknowledged", "generalisability to any defined clinical population")
+claim("generalisability acknowledged", "generalisability to a defined clinical population is unknown")
 
 # S1 must carry no clinical columns, and no blank placeholder columns anywhere.
 import openpyxl
