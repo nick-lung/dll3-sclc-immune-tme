@@ -74,21 +74,25 @@ def figure1():
         ax.add_patch(FancyArrowPatch((x1, y1), (x2, y2), arrowstyle="-|>",
                                      mutation_scale=8, lw=0.9, color=GREY))
 
-    # (A) RNA-seq flow
+    # (A) RNA-seq flow, CONSORT style: the spine carries the included sets and the
+    # exclusion branches off to the right with its reason
     ax = fig.add_subplot(gs[0, 0]); ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.axis("off")
     panel(ax, "A", "Institutional bulk RNA-seq")
-    box(ax, .08, .84, .84, .12, "17 tumour specimens sequenced\n(CellCarta P1947, all DV200 ≥ 40)")
-    arrow(ax, .5, .83, .5, .77)
-    box(ax, .08, .60, .84, .16,
-        "Excluded on pathology adjudication: 2\n21029B2866, 21029T2952 → LC-NEC",
-        fc="#FBEDED", ec=RED)
-    arrow(ax, .5, .59, .5, .50)
-    box(ax, .08, .36, .84, .13, "PRIMARY ANALYSIS SET\n15 pathologically confirmed SCLC",
-        fc="#E6F0E9", ec=GREEN, weight="bold")
-    arrow(ax, .5, .35, .5, .26)
-    box(ax, .08, .12, .84, .13, "Subset with DLL3 IHC H-score: 10\n(= the mIF analysis cohort)")
-    ax.text(.5, .025, "The 17-specimen set is retained\nas a sensitivity analysis",
-            ha="center", va="center", fontsize=6.0, style="italic", color=GREY)
+    SP = .31
+    box(ax, .02, .84, .58, .12, "17 tumour specimens sequenced\n(CellCarta P1947, all DV200 ≥ 40)",
+        fs=6.3)
+    arrow(ax, SP, .83, SP, .50)
+    arrow(ax, SP, .665, .63, .665)
+    box(ax, .64, .575, .345, .18,
+        "Excluded: 2\nLC-NEC on pathology\nadjudication\n(21029B2866, 21029T2952)",
+        fc="#FBEDED", ec=RED, fs=5.8)
+    box(ax, .02, .36, .58, .13, "PRIMARY ANALYSIS SET\n15 pathologically confirmed SCLC",
+        fc="#E6F0E9", ec=GREEN, fs=6.3, weight="bold")
+    arrow(ax, SP, .35, SP, .26)
+    box(ax, .02, .12, .58, .13, "Subset with DLL3 IHC H-score: 10\n(= the mIF analysis cohort)",
+        fs=6.3)
+    ax.text(.655, .30, "The 17-specimen set is\nretained as a sensitivity\nanalysis",
+            ha="left", va="center", fontsize=6.0, style="italic", color=GREY)
 
     # (B) mIF flow
     ax = fig.add_subplot(gs[0, 1]); ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.axis("off")
