@@ -242,8 +242,8 @@ if f"{_d6.spearman_r.min():+.3f} to {_d6.spearman_r.max():+.3f}" in _c2:
     fails.append("TABLES Table 1 quotes the six-gene feature-versus-feature range")
 # the S9 legend annotates a five-gene figure
 claim("S9 legend uses the five-gene value",
-      f"unrelated to the same five-gene epithelial APM score (*r* = {_ctx5.spearman_r:+.3f}, "
-      f"*P* = {_ctx5.p:.2f})", LEG)
+      f"no association was detected between DLL3 and the same five-gene epithelial APM score "
+      f"(*r* = {_ctx5.spearman_r:+.3f}, *P* = {_ctx5.p:.2f})", LEG)
 claim("Texh counts", "only 578 Texh cells")
 claim("Texh concentration", "74% from one donor, RU1195")
 
@@ -254,7 +254,8 @@ print(f"  mIF phenotypes={len(mif)} FDR-significant={int((mif.q<0.05).sum())} "
 checks += 1
 if int((mif.q < 0.05).sum()) != 0:
     fails.append("MIF the text reports no significant phenotype but the derived table has one")
-claim("mIF null and minimum q", f"across all {len(mif)} phenotypes (minimum *q* = {mif.q.min():.3f}")
+claim("mIF null and minimum q", f"any of the {len(mif)} mIF phenotypes, including the eight CD137 "
+      f"phenotypes, was detected after Benjamini–Hochberg correction (minimum *q* = {mif.q.min():.3f}")
 forbid("mIF all q=0.895", "all *q* = 0.895")
 forbid("mIF top-3 narrative", "directionally concordant trends without statistical support")
 forbid("mIF Fig 3F misref", "3.5-fold higher")
