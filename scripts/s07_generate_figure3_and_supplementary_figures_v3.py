@@ -44,7 +44,8 @@ def save(fig, name):
 
 
 def panel(ax, letter, title, fs=8.5):
-    ax.set_title(f"{letter} {title}", fontsize=fs, loc="left", weight="bold", pad=6)
+    ax.set_title(f"({letter}) {title}" if title else f"({letter})",
+                 fontsize=fs, loc="left", weight="bold", pad=6)
 
 
 def fisher_ci(r, n, a=0.05):
@@ -120,7 +121,7 @@ def figure3():
     ax.set_yticks([1, 5, 10, 15, 19]); ax.set_ylim(-0.5, 23.5)   # headroom for the label
     ax.text(.04, .95, f"$r$ = {r:+.3f}, $P$ = {p:.3f}",
             transform=ax.transAxes, fontsize=6.2, va="top")
-    panel(ax, "F", "Composition association")
+    panel(ax, "F", "DLL3 vs CD8$^+$ Texh")
     ax.tick_params(labelsize=6.3)
 
     # A: TNFRSF9 positivity by subtype
@@ -156,7 +157,7 @@ def figure3():
         ax.set_ylabel(f"{lab}$^+$ cells (% of CD8)", fontsize=7)
         ax.text(.03, .95, f"{higher}/{len(paired)} higher\nWilcoxon $P$ = {pv:.1e}",
                 transform=ax.transAxes, fontsize=6.2, va="top")
-        panel(ax, "B" if i == 0 else "C", f"{lab}, paired", fs=8.0)
+        panel(ax, "B" if i == 0 else "C", lab, fs=8.0)
         ax.tick_params(labelsize=6.3)
 
     # D: per-donor lineage distribution (not a pie)
@@ -228,7 +229,7 @@ def figure3():
     for i, row in eq.iterrows():
         ax.text(row.spearman_r, yy[i] + .24, f"$r$ = {row.spearman_r:+.3f}, $P$ = {row.p:.2f}",
                 ha="center", fontsize=6.2)
-    panel(ax, "G", "DLL3 expression and proportions of $TNFRSF9$-expressing CD8 T cells")
+    panel(ax, "G", "DLL3 vs $TNFRSF9^+$ CD8$^+$ cells")
     ax.tick_params(labelsize=6.3)
 
     save(fig, "Figure3_v3_TNFRSF9_CD8_Phenotype")
@@ -249,8 +250,8 @@ def figure4():
                & (axeq.y == "epithelial_APM_z_5gene_primary")].iloc[0]
     prin = d5.loc["TNFRSF9pos_pct_of_CD8"]
 
-    fig = plt.figure(figsize=(7.6, 2.9))
-    gs = fig.add_gridspec(1, 3, width_ratios=[1, 1.1, 1], wspace=1.0)
+    fig = plt.figure(figsize=(7.9, 2.9))
+    gs = fig.add_gridspec(1, 3, width_ratios=[1, 1.1, 1], wspace=1.35)
 
     def rank_scatter(ax, x, y, colour, edge, solid):
         rx, ry = stats.rankdata(x), stats.rankdata(y)
@@ -269,7 +270,7 @@ def figure4():
     ax.set_ylabel("$TNFRSF9^+$ cells, % of CD8$^+$ (rank)", fontsize=7)
     ax.text(.04, .96, f"$r$ = {prin.spearman_r:+.3f}\n95% CI {prin.ci_low:+.3f} to {prin.ci_high:+.3f}\n"
                       f"BH $q$ = {prin.bh_q:.3f}", transform=ax.transAxes, fontsize=6.2, va="top")
-    panel(ax, "A", "Principal endpoint, 19 donors", fs=7.6)
+    panel(ax, "A", "", fs=7.6)
 
     # (B) every sensitivity analysis reported in Results, three endpoints
     ax = fig.add_subplot(gs[0, 1])
@@ -316,7 +317,7 @@ def figure4():
     ax.set_ylabel("Epithelial APM score (rank)", fontsize=7)
     ax.text(.04, .96, f"$r$ = {ctx.spearman_r:+.3f}\n$P$ = {ctx.p:.2f}", transform=ax.transAxes,
             fontsize=6.2, va="top")
-    panel(ax, "C", "DLL3 and epithelial APM", fs=7.6)
+    panel(ax, "C", "", fs=7.6)
 
     save(fig, "Figure4_v3_Epithelial_APM_and_TNFRSF9_CD8")
 
@@ -489,7 +490,7 @@ def suppS5_S6_S7():
     ax.set_xticks([1, 2, 4]); ax.set_xticklabels(["1", "2", "4"])
     ax.set_xlabel("Odds ratio for marker positivity in $TNFRSF9^+$ cells\n"
                   "(cell-level logistic, donor cluster-robust CI)", fontsize=7)
-    ax.set_title("A Depth- and donor-adjusted models", fontsize=8, loc="left", weight="bold")
+    ax.set_title("(A) Depth- and donor-adjusted models", fontsize=8, loc="left", weight="bold")
     ax.tick_params(labelsize=6.3)
 
     ax = axes[1]
@@ -505,7 +506,7 @@ def suppS5_S6_S7():
     ax.set_xticks([0, 1, 2.2, 3.2])
     ax.set_xticklabels(["$TNFRSF9^-$", "$TNFRSF9^+$"] * 2, fontsize=5.8, rotation=25, ha="right")
     ax.set_ylabel("Mean normalized expression", fontsize=7)
-    ax.set_title("B Continuous expression, not binary detection", fontsize=8, loc="left",
+    ax.set_title("(B) Continuous expression, not binary detection", fontsize=8, loc="left",
                  weight="bold")
     ax.tick_params(labelsize=6.3)
     fig.suptitle("Supplementary Figure S6. Depth-adjusted marker positivity and continuous expression",
@@ -526,7 +527,7 @@ def suppS5_S6_S7():
     ax.set_xlabel("CD8$^+$ cells per sample", fontsize=7)
     ax.set_xscale("symlog")
     ax.legend(fontsize=6.0, frameon=False, loc="lower right")
-    ax.set_title("A CD8 compartment size and $TNFRSF9$ split", fontsize=8, loc="left",
+    ax.set_title("(A) CD8 compartment size and $TNFRSF9$ split", fontsize=8, loc="left",
                  weight="bold")
     ax.tick_params(labelsize=6.3)
 
@@ -542,7 +543,7 @@ def suppS5_S6_S7():
     ax.text(.30, .90, f"{share.index[0]} contributes {share.iloc[0]:.0f}%\n"
                       f"of all {int(counts['n_CD8_Texh'].sum())} Texh cells",
             transform=ax.transAxes, fontsize=6.2, color=RED, va="top")
-    ax.set_title("B Texh cells are concentrated in one donor", fontsize=8, loc="left",
+    ax.set_title("(B) Texh cells are concentrated in one donor", fontsize=8, loc="left",
                  weight="bold")
     ax.tick_params(labelsize=6.3)
     fig.suptitle("Supplementary Figure S7. Donor cell counts in the Chan atlas",

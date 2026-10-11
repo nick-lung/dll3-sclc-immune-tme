@@ -50,7 +50,8 @@ def save(fig, name, tight=True):
 
 
 def panel(ax, letter, title):
-    ax.set_title(f"{letter} {title}", fontsize=8.5, loc="left", weight="bold", pad=6)
+    ax.set_title(f"({letter}) {title}" if title else f"({letter})",
+                 fontsize=8.5, loc="left", weight="bold", pad=6)
 
 
 def fisher_ci(r, n, a=0.05):
@@ -94,7 +95,7 @@ def figure1():
 
     # (B) mIF flow
     ax = fig.add_subplot(gs[0, 1]); ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.axis("off")
-    panel(ax, "B", "Institutional multiplex immunofluorescence")
+    panel(ax, "B", "Institutional mIF")
     box(ax, .04, .84, .42, .12, "Archival batch\n15 patients / 372 ROIs", fs=6.3)
     box(ax, .54, .84, .42, .12, "Prospective batch\n16 patients / 260 ROIs", fs=6.3)
     arrow(ax, .25, .83, .25, .76)
@@ -110,7 +111,7 @@ def figure1():
 
     # (C) external datasets
     ax = fig.add_subplot(gs[1, :]); ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.axis("off")
-    panel(ax, "C", "External datasets and the analysis each supports")
+    panel(ax, "C", "External datasets")
     cards = [
         (.015, "Jiang cohort\nGSE60052", "79 tumours\n(7 normal lung controls\nexcluded from all\nprimary analyses)",
          "Feature 1:\nDLL3 vs bulk APM"),
@@ -139,7 +140,7 @@ def figure2():
     s9 = pd.read_csv(os.path.join(SRC, "SuppTable_External_Replication_and_Leukocyte_Sensitivity_v3.csv"))
     mt = pd.read_csv(os.path.join(SRC, "Meta_TwoExternalCohorts_v3.csv")).iloc[0]
 
-    fig = plt.figure(figsize=(6.9, 7.3), constrained_layout=True)
+    fig = plt.figure(figsize=(7.05, 7.3), constrained_layout=True)
     # external cohorts first (A-D, cited first in Results), institutional cohort last (E-G)
     gs = fig.add_gridspec(3, 3, height_ratios=[1, 1.05, 1])
 
@@ -154,7 +155,7 @@ def figure2():
     ax.set_ylabel("CD274/APM ratio (rank)", fontsize=7)
     ax.text(.04, .93, f"$r$ = {r:+.3f}\n$P$ = {p:.3f}", transform=ax.transAxes,
             fontsize=7.2, va="top")
-    panel(ax, "E", "Discovery, $N$ = 15 SCLC")
+    panel(ax, "E", "Institutional cohort")
     ax.tick_params(labelsize=7.0)
 
     # (F) LOO
@@ -193,8 +194,8 @@ def figure2():
     ax.tick_params(labelsize=7.0)
 
     # (A) Jiang scatter  (B) Cologne scatter
-    for i, (dat, lab, key) in enumerate([(jia, "Jiang (GSE60052), $n$ = 79", "APM_z_5gene"),
-                                         (col, "George/Cologne, $n$ = 81", "APM_z_5gene")]):
+    for i, (dat, lab, key) in enumerate([(jia, "Jiang", "APM_z_5gene"),
+                                         (col, "George/Cologne", "APM_z_5gene")]):
         ax = fig.add_subplot(gs[0, i])
         x, yv = stats.rankdata(dat.DLL3_log2), stats.rankdata(dat[key])
         rr, pp = stats.spearmanr(dat.DLL3_log2, dat[key])
@@ -225,7 +226,7 @@ def figure2():
     ax.set_xlabel("Spearman $r$ (DLL3 vs APM)", fontsize=7)
     ax.set_xlim(-.75, .05)
     ax.set_ylim(-.6, 2.6)
-    panel(ax, "C", "External replication")
+    panel(ax, "C", "Meta-analysis")
     ax.tick_params(labelsize=7.0)
 
     # (D) stepwise adjustment, ONE estimand scale
@@ -252,7 +253,7 @@ def figure2():
     ax.legend(fontsize=7.0, loc="lower left", frameon=False)
     ax.text(.985, .06, "PTPRC models are post hoc", transform=ax.transAxes,
             fontsize=6.8, style="italic", color=GREY, ha="right")
-    panel(ax, "D", "Stepwise multivariable adjustment in both cohorts, one estimand")
+    panel(ax, "D", "Multivariable adjustment")
     ax.tick_params(labelsize=7.0)
 
     save(fig, "Figure2_v3_Antigen_Presentation_and_Leukocyte_Content", tight=False)
