@@ -102,7 +102,7 @@ def figure1():
         fc="#FBEDED", ec=RED, fs=6.0)
     arrow(ax, .75, .83, .75, .76)
     box(ax, .54, .48, .42, .27,
-        "Excluded by diagnosis: 1\n(21029B2866, LCNEC)\n\nExcluded, no H-score: 5\n(67 ROIs)",
+        "Excluded by diagnosis: 1\n(LCNEC)\n\nExcluded, no H-score: 5\n(67 ROIs)",
         fc="#FBEDED", ec=RED, fs=6.0)
     arrow(ax, .75, .47, .75, .36)
     box(ax, .12, .17, .82, .18, "mIF ANALYSIS SET\n10 patients / 193 ROIs\n(ROIs per patient 1–38, median 17)",
