@@ -1,14 +1,14 @@
 """v3 P0-1: Institutional discovery cohort re-analysis after pathology adjudication.
 
 Pathology adjudication (2026-08-06) confirmed that two of the 17 sequenced
-specimens are large-cell neuroendocrine carcinoma (LC-NEC), not SCLC:
+specimens are large-cell neuroendocrine carcinoma (LCNEC), not SCLC:
     21029B2866, 21029T2952
 Both are therefore excluded from the primary analysis set, which becomes N = 15
 pathologically confirmed SCLC.
 
 This aligns the RNA-seq inclusion criterion with the mIF inclusion criterion
 (the archival mIF batch was already excluded in part because 6 of its 15 patients
-were LC-NEC). v2 stated "all 17 histologically confirmed SCLC; no exclusions",
+were LCNEC). v2 stated "all 17 histologically confirmed SCLC; no exclusions",
 which was incorrect.
 
 The N=17 (diagnosis-inclusive) analysis is retained as a sensitivity analysis so
@@ -27,7 +27,7 @@ SEED = 20260806
 rng = np.random.default_rng(SEED)
 N_BOOT = 2000
 
-LC_NEC = ["21029B2866", "21029T2952"]          # pathology-adjudicated LC-NEC
+LC_NEC = ["21029B2866", "21029T2952"]          # pathology-adjudicated LCNEC
 APM = ["HLA-A", "HLA-B", "HLA-C", "B2M", "TAP1", "TAP2"]
 NE4 = ["ASCL1", "NEUROD1", "POU2F3", "YAP1"]
 EFF = ["GZMB", "PRF1", "NKG7", "IFNG"]
@@ -71,7 +71,7 @@ SCLC15 = [s for s in ALL17 if s not in LC_NEC]
 
 assert len(ALL17) == 17 and len(SCLC15) == 15, (len(ALL17), len(SCLC15))
 print(f"sequenced: {len(ALL17)}")
-print(f"LC-NEC excluded by pathology adjudication: {LC_NEC}")
+print(f"LCNEC excluded by pathology adjudication: {LC_NEC}")
 print(f"PRIMARY analysis set (pathologically confirmed SCLC): N={len(SCLC15)}")
 
 rows = []
@@ -164,10 +164,10 @@ print("=" * 88)
 # per-sample diagnosis table for the cohort-flow supplement
 diag = pd.DataFrame({"sample_id": ALL17})
 diag["adjudicated_diagnosis"] = np.where(diag.sample_id.isin(LC_NEC),
-                                         "LC-NEC (large-cell neuroendocrine carcinoma)", "SCLC")
+                                         "LCNEC (large-cell neuroendocrine carcinoma)", "SCLC")
 diag["in_primary_analysis_set"] = ~diag.sample_id.isin(LC_NEC)
 diag["exclusion_reason"] = np.where(diag.sample_id.isin(LC_NEC),
-                                    "Diagnosis: LC-NEC on pathology adjudication (2026-08-06)", "")
+                                    "Diagnosis: LCNEC on pathology adjudication (2026-08-06)", "")
 diag = diag.sort_values("sample_id")
 diag.to_csv(os.path.join(OUT, "SuppTable_RNAseq_Diagnosis_Adjudication_v3.csv"), index=False)
 

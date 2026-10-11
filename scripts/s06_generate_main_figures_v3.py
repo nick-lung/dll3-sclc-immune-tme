@@ -50,7 +50,7 @@ def save(fig, name, tight=True):
 
 
 def panel(ax, letter, title):
-    ax.set_title(f"({letter}) {title}", fontsize=8.5, loc="left", weight="bold", pad=6)
+    ax.set_title(f"{letter} {title}", fontsize=8.5, loc="left", weight="bold", pad=6)
 
 
 def fisher_ci(r, n, a=0.05):
@@ -83,16 +83,14 @@ def figure1():
         fs=6.3)
     arrow(ax, SP, .83, SP, .50)
     arrow(ax, SP, .665, .63, .665)
-    box(ax, .64, .575, .345, .18,
-        "Excluded: 2\nLC-NEC on pathology\nadjudication\n(21029B2866, 21029T2952)",
-        fc="#FBEDED", ec=RED, fs=5.8)
+    box(ax, .64, .60, .345, .13,
+        "Excluded: 2\nLCNEC on pathology\nadjudication",
+        fc="#FBEDED", ec=RED, fs=6.0)
     box(ax, .02, .36, .58, .13, "PRIMARY ANALYSIS SET\n15 pathologically confirmed SCLC",
         fc="#E6F0E9", ec=GREEN, fs=6.3, weight="bold")
     arrow(ax, SP, .35, SP, .26)
     box(ax, .02, .12, .58, .13, "Subset with DLL3 IHC H-score: 10\n(= the mIF analysis cohort)",
         fs=6.3)
-    ax.text(.655, .30, "The 17-specimen set is\nretained as a sensitivity\nanalysis",
-            ha="left", va="center", fontsize=6.0, style="italic", color=GREY)
 
     # (B) mIF flow
     ax = fig.add_subplot(gs[0, 1]); ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.axis("off")
@@ -100,18 +98,15 @@ def figure1():
     box(ax, .04, .84, .42, .12, "Archival batch\n15 patients / 372 ROIs", fs=6.3)
     box(ax, .54, .84, .42, .12, "Prospective batch\n16 patients / 260 ROIs", fs=6.3)
     arrow(ax, .25, .83, .25, .76)
-    box(ax, .04, .48, .42, .27, "EXCLUDED in full\nno DLL3 H-score;\n6 of 15 are LC-NEC",
+    box(ax, .04, .48, .42, .27, "EXCLUDED in full\nno DLL3 H-score;\n6 of 15 are LCNEC",
         fc="#FBEDED", ec=RED, fs=6.0)
     arrow(ax, .75, .83, .75, .76)
     box(ax, .54, .48, .42, .27,
-        "Excluded by diagnosis: 1\n(21029B2866, LC-NEC)\n\nExcluded, no H-score: 5\n(67 ROIs)",
+        "Excluded by diagnosis: 1\n(21029B2866, LCNEC)\n\nExcluded, no H-score: 5\n(67 ROIs)",
         fc="#FBEDED", ec=RED, fs=6.0)
     arrow(ax, .75, .47, .75, .36)
     box(ax, .12, .17, .82, .18, "mIF ANALYSIS SET\n10 patients / 193 ROIs\n(ROIs per patient 1–38, median 17)",
         fc="#E6F0E9", ec=GREEN, fs=6.3, weight="bold")
-    ax.text(.5, .045, "All 10 are a subset of the 15 RNA-sequenced SCLC patients:\n"
-                     "the two institutional analyses are not independent",
-            ha="center", va="center", fontsize=6.0, style="italic", color=GREY)
 
     # (C) external datasets
     ax = fig.add_subplot(gs[1, :]); ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.axis("off")

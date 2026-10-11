@@ -277,8 +277,8 @@ claim("normal lung controls", "normal lung controls")
 forbid("AI policy assertion", "consistent with the journal's policy")
 # IJC 4.1.1: the cover letter must carry any disclosure of assistance for writing or editing.
 claim("AI assistance disclosed in cover letter", "**Disclosure of AI assistance.**", CL)
-claim("adjudication stated", "were adjudicated large-cell neuroendocrine carcinoma (LC-NEC) and excluded")
-claim("mIF criterion consistency", "The same diagnostic criterion excluded LC-NEC from the mIF cohort")
+claim("adjudication stated", "were adjudicated large-cell neuroendocrine carcinoma (LCNEC) and excluded")
+claim("mIF criterion consistency", "The same diagnostic criterion excluded LCNEC from the mIF cohort")
 claim("post hoc labelled", "post hoc")
 forbid("exhausted CD8 harbor claim", "harbor more exhausted CD8")
 

@@ -53,7 +53,7 @@ for pid, h, sp, nr in zip(hs.Patient_ID, hs.DLL3_Hscore, hs.Specimen_type, hs.N_
 # limitation this creates is stated explicitly in the manuscript Limitations.
 s1 = pd.DataFrame({"Sample ID": meta.SampleID})
 s1["Sequencing-provider histology label"] = meta.SampleOrigin.values
-s1["Adjudicated diagnosis"] = np.where(s1["Sample ID"].isin(LC_NEC), "LC-NEC", "SCLC")
+s1["Adjudicated diagnosis"] = np.where(s1["Sample ID"].isin(LC_NEC), "LCNEC", "SCLC")
 s1["In RNA-seq primary analysis set"] = np.where(s1["Sample ID"].isin(LC_NEC), "No", "Yes")
 s1["DV200"] = meta.DV200.values
 s1["DLL3 IHC H-score"] = s1["Sample ID"].map(lambda x: hmap[x][0] if x in hmap else None)
@@ -72,7 +72,7 @@ write("SuppTable_S2_Specimen_and_Assay_Metadata_v3.xlsx", {"S2": (
     s1,
     ["Adjudicated diagnosis: independent review of the original pathology reports and slides by "
      "the institutional pathology service, performed without reference to any analysis result.",
-     "21029B2866 and 21029T2952 were adjudicated as large-cell neuroendocrine carcinoma (LC-NEC) "
+     "21029B2866 and 21029T2952 were adjudicated as large-cell neuroendocrine carcinoma (LCNEC) "
      "and are excluded from the RNA-seq primary analysis set.",
      "DLL3 IHC H-score, IHC group, specimen procedure and mIF ROI count are populated only for "
      "the 10 patients in the mIF analysis set; the DLL3 IHC group threshold is H-score >= 100.",
@@ -135,7 +135,7 @@ qc = meta.rename(columns={
     "Percentage Uniquely Mapped Reads": "% uniquely mapped",
     "Percentage mRNA Bases": "% mRNA bases", "Percentage Duplicates": "% duplicates",
     "BAM_Filename": "BAM filename"})
-qc["Adjudicated diagnosis"] = np.where(qc["Sample ID"].isin(LC_NEC), "LC-NEC", "SCLC")
+qc["Adjudicated diagnosis"] = np.where(qc["Sample ID"].isin(LC_NEC), "LCNEC", "SCLC")
 qc["In primary analysis set"] = np.where(qc["Sample ID"].isin(LC_NEC), "No", "Yes")
 qc = qc[["Sample ID", "CellCarta ID", "Tissue type", "Adjudicated diagnosis",
          "In primary analysis set", "DV200", "Raw reads (M)", "% uniquely mapped",
@@ -144,7 +144,7 @@ write("SuppTable_S5_RNAseq_QC_Metrics_v3.xlsx", {"S5": (
     "Supplementary Table S5. Per-sample RNA-sequencing quality metrics and adjudicated diagnosis "
     "(CellCarta P1947).", qc,
     ["17 specimens were sequenced; all passed the pre-specified DV200 >= 40 threshold.",
-     "THE PRIMARY ANALYSIS SET IS N = 15. 21029B2866 and 21029T2952 were adjudicated as LC-NEC "
+     "THE PRIMARY ANALYSIS SET IS N = 15. 21029B2866 and 21029T2952 were adjudicated as LCNEC "
      "and excluded on diagnosis.",
      "CORRECTION: the v2 version of this table carried a footnote stating that N = 16 specimens "
      "'with complete paired clinical and DLL3 quantification metadata were included in the primary "
@@ -205,9 +205,9 @@ s7 = pd.DataFrame([
     ("Institutional cohort composition", "15 pathologically adjudicated SCLC",
      "All 17 sequenced specimens (diagnosis-inclusive)",
      "CD274/APM ratio r = +0.579 (P = 0.024)", "r = +0.608 (P = 0.0096)",
-     "Pathology adjudication (2026-08-06) reclassified 21029B2866 and 21029T2952 as LC-NEC. v2 "
+     "Pathology adjudication (2026-08-06) reclassified 21029B2866 and 21029T2952 as LCNEC. v2 "
      "stated 'all 17 histologically confirmed SCLC; no exclusions', which was incorrect. "
-     "Excluding LC-NEC also makes the RNA-seq criterion identical to the mIF criterion."),
+     "Excluding LCNEC also makes the RNA-seq criterion identical to the mIF criterion."),
     ("Jiang population", "79 tumours only", "All 86 including 7 normal lung controls",
      "r = -0.299 (P = 0.0075)", "r = -0.410 (P = 8.7e-05)",
      "Controls are DLL3-null and APM-high, so retaining them inflates the correlation without "
@@ -264,7 +264,7 @@ s8 = pd.DataFrame([
     ("Bulk RNA-seq", "Tumours sequenced (CellCarta P1947)", 17, "-",
      "All 17 passed the pre-specified DV200 >= 40 threshold."),
     ("Bulk RNA-seq", "EXCLUDED - diagnosis", 2, "-",
-     "21029B2866 and 21029T2952, adjudicated as large-cell neuroendocrine carcinoma (LC-NEC) "
+     "21029B2866 and 21029T2952, adjudicated as large-cell neuroendocrine carcinoma (LCNEC) "
      "rather than SCLC on independent review of the original pathology reports and slides, "
      "performed without reference to any analysis result (2026-08-06)."),
     ("Bulk RNA-seq", "ANALYSED (primary)", 15, "-",
@@ -276,10 +276,10 @@ s8 = pd.DataFrame([
      "H-scores 0, 6, 10, 10, 50, 100, 180, 270, 270, 300. These 10 are the mIF analysis cohort."),
     ("mIF", "Archival batch (slides 2023-04)", 15, 372,
      "EXCLUDED IN FULL. No linked DLL3 H-score; early-stage surgical specimens; 6 of the 15 are "
-     "LC-NEC rather than SCLC."),
+     "LCNEC rather than SCLC."),
     ("mIF", "Prospective batch (slides 2025-01)", 16, 260, "-"),
     ("mIF", "Prospective, EXCLUDED - diagnosis", 1, "-",
-     "21029B2866 (LC-NEC). Reported separately from the H-score exclusions below, because "
+     "21029B2866 (LCNEC). Reported separately from the H-score exclusions below, because "
      "exclusion by diagnosis and exclusion by missing exposure measurement carry different "
      "selection-bias implications."),
     ("mIF", "Prospective, EXCLUDED - no DLL3 H-score", 5, 67,
@@ -312,9 +312,9 @@ s8 = pd.DataFrame([
 write("SuppTable_S4_Cohort_Flow_v3.xlsx", {"S4": (
     "Supplementary Table S4. Cohort flow.", s8,
     ["CHANGED FROM v2: v2 recorded 'Excluded: 0 - none. All 17 are histologically confirmed "
-     "SCLC'. Pathology adjudication on 2026-08-06 established that two specimens are LC-NEC. The "
+     "SCLC'. Pathology adjudication on 2026-08-06 established that two specimens are LCNEC. The "
      "primary RNA-seq analysis set is therefore 15, not 17.",
-     "This also resolves an internal inconsistency in v2, in which LC-NEC was grounds for "
+     "This also resolves an internal inconsistency in v2, in which LCNEC was grounds for "
      "exclusion in the mIF cohort but not in the RNA-seq cohort."])})
 
 # ------------------------------------------------------------------ S6
